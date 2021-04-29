@@ -7,14 +7,15 @@ ri-redis-hackathon-2021
 - Eric Offermann
 - Brian Broerman 
 
-### Open Source Tools
-#### Redis
+### Redis
 Redismod Github:
 https://github.com/RedisLabsModules/redismod
 
 Redis-Insight GUI:
 https://redislabs.com/redis-enterprise/redis-insight/
 
-
-#### Mumble
-https://github.com/mumble-voip/mumble
+#### Running Redis locally
+```shell
+cd redis
+docker-compose up
+```
