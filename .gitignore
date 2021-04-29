@@ -1,0 +1,5 @@
+# exclude everything
+/redis/data/*
+
+# exception to the rule
+!/redis/data/.gitkeep

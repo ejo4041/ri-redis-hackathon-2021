@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  redismod:
+    image: "redislabs/redismod"
+    env_file: redis.env
+    volumes:
+      - ./data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["/usr/local/etc/redis/redis.conf"] # load modules, set /data directory, point at python
+    ports:
+      - 6379:6379
