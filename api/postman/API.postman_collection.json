@@ -1,0 +1,41 @@
+{
+	"info": {
+		"_postman_id": "bb148634-8ad3-4a9c-a2f5-413df474044f",
+		"name": "API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add Template",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"adminName\": \"James\",\n    \"templateName\": \"Test\",\n    \"templateData\": [\n        {\"first_name\":\"fname\"},\n        {\"last_name\":\"lname\"}\n\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/admin/template/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"admin",
+						"template",
+						"create"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
