@@ -1,0 +1,32 @@
+.Sidebar {
+    background: #333;
+    overflow: hidden;
+    height: 100vh;
+
+  .SidebarIcon {
+    padding: 20px;
+    color: #FFF;
+    &:hover, &.active {
+      background: #999;
+      cursor: pointer;
+    }
+    svg {
+      font-size: 40px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .SidebarIcon.Rotate svg {
+      animation: App-logo-spin infinite 40s linear;
+    }
+  }
+
+@keyframes App-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
