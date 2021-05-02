@@ -50,6 +50,7 @@ POST http://localhost:8081/api/v1/admin/template/create
         {"last_name":"lname"}
     ]
 }
+```
 
 ### KeyCloak For Authentication
 
