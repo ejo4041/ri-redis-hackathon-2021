@@ -60,12 +60,12 @@ Keycloak docker compose and configuration artifacts are in the keycloak director
 
 1. Make the keycloak directory your working dir.
 1. Make the 'kcdb' directory to persist keycloak data in:
-     1.	```mkdir kcdb
+     1. `mkdir kcdb`
 1. Set admin credentials in environment variables:
-     1.	```export kcadmin=admin
-     1. ```export kcadmin_password=admin
+     1. `export kcadmin=admin`
+     1. `export kcadmin_password=admin`
 1. Start the keycloak docker container 
-     1.	```docker-compose up
+     1. `docker-compose up`
 1. Navigate web browser to http://localhost:8080
 1. Log in as admin
 1. Import the CaaS Realm from the caa-real-export.json file in this directory.
