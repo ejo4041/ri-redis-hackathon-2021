@@ -1,0 +1,39 @@
+.App {
+  text-align: center;
+  display: flex;
+
+}
+.App main {
+  width: 100%;
+  flex-grow: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.App-logo {
+  display: flex;
+  align-items: center;
+  font-size: 40px;
+  color: #333;
+}
+.App-logo svg {
+  font-size: 100px;
+  pointer-events: none;
+  color: #333;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo svg {
+    animation: App-logo-spin infinite 40s linear;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
