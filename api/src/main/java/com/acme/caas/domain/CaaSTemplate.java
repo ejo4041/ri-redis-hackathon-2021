@@ -10,7 +10,8 @@ import lombok.*;
 @Builder
 public class CaaSTemplate {
 
-    private String adminName;
+    private String settingsId;
     private String templateName;
-    private List<HashMap<String, Object>> templateData;
+    private HashMap<String, Object> templateSettings; //HashMap as a mapping for a free-form object with fields
+
 }
