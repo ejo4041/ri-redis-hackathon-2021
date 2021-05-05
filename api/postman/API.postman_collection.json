@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"adminName\": \"James\",\n    \"templateName\": \"Test\",\n    \"templateData\": [\n        {\"first_name\":\"fname\"},\n        {\"last_name\":\"lname\"}\n\n    ]\n}",
+					"raw": "{\n    \"settingsId\": \"James\",\n    \"templateName\": \"Test\",\n    \"templateSettings\": {\n        \"first_name\":\"fname\",\n        \"last_name\":\"lname\"\n\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"

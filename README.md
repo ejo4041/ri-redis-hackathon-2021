@@ -52,16 +52,19 @@ Postman scripts are in the postman directory.
 
 #### API Endpoints
 
+Swagger UI:
+http://localhost:8082/swagger-ui.html
+
 ```shell
 POST http://localhost:8082/api/v1/admin/template/create
 
 {
-    "adminName": "James",
+    "settingsId": "James",
     "templateName": "Test",
-    "templateData": [
-        {"first_name":"fname"},
-        {"last_name":"lname"}
-    ]
+    "templateSettings": {
+        "first_name":"fname",
+        "last_name":"lname"
+    }
 }
 ```
 
