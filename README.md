@@ -23,6 +23,19 @@ https://redislabs.com/redis-enterprise/redis-insight/
 cd redis
 docker-compose up
 ```
+
+#### Connecting local Redis to RedisInsight
+1. Download RedisInsight from the link above
+2. Install and run the app. 
+3. Navigate to http://localhost:8001.
+4. Select "I already have a database"
+5. Select "Connect to a Redis Database using hostname and port"
+6. Enter the following values
+    1. host: localhost
+    2. port: 6379
+    3. name: anything you want here
+7. Now, select the redis database you just created in the UI
+
 ### API
 
 Make sure REDIS docker container is started first as the API service will try to connect to it.

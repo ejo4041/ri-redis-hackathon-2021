@@ -61,23 +61,16 @@ public class RedisServiceImpl implements RedisService {
     public void updateTemplateData(String settingsId, String settingsKey, Object settingsValue) throws Exception {
         logger.info("Updating template setting '" + settingsKey + "' in Redis");
 
-        redisClient.set(settingsId,settingsValue, new Path(".template."+settingsKey));
+        redisClient.set(settingsId,settingsValue, new Path(".templateSettings."+settingsKey));
 
         logger.info("Redis template setting '" + settingsKey + "' updated");
-    }
-
-    @Override
-    public void updateTemplateData(String settingsId, List<Map.Entry<String, Object>> settings) throws Exception {
-        for(Map.Entry<String, Object> entry : settings){
-            updateTemplateData(settingsId, entry.getKey(), entry.getValue());
-        }
     }
 
     @Override
     public void deleteTemplateData(String settingsId, String settingsKey) throws Exception {
         logger.info("Deleting template setting '" + settingsKey + "' in Redis");
 
-        redisClient.del(settingsId, new Path(".template."+settingsKey));
+        redisClient.del(settingsId, new Path(".templateSettings."+settingsKey));
 
         logger.info("Redis template setting '" + settingsKey + "' deleted");
     }
@@ -120,7 +113,7 @@ public class RedisServiceImpl implements RedisService {
     public Object getTemplateSettings(String settingsId, String settingKey) throws Exception {
         logger.info("Loading setting '" + settingKey + "' in template with id '" + settingsId + "'");
 
-        var path = new Path(".template." + settingKey);
+        var path = new Path(".templateSettings." + settingKey);
         var setting = redisClient.get(settingsId,redisClient.type(settingsId,path),path);
 
         logger.info("Loaded template setting '" + settingKey + "'");
@@ -143,11 +136,16 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public void deleteTemplate(CaaSTemplate template) throws Exception {
-        logger.info("Deleting template with id '" + template.getSettingsId() + "' in Redis");
+        deleteTemplate(template.getSettingsId());
+    }
 
-        redisClient.del(template.getSettingsId());
+    @Override
+    public void deleteTemplate(String settingsId) throws Exception{
+        logger.info("Deleting template with id '" + settingsId + "' in Redis");
 
-        logger.info("Redis template with id '" + template.getSettingsId() + "' was deleted");
+        redisClient.del(settingsId);
+
+        logger.info("Redis template with id '" + settingsId + "' was deleted");
     }
 
 }

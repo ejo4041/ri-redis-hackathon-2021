@@ -12,6 +12,6 @@ public class CaaSTemplate {
 
     private String settingsId;
     private String templateName;
-    private HashMap<String, Object> templateSettings; //HashMap as a mapping for a free-form object with fields
+    private Map<String, Object> templateSettings; //HashMap as a mapping for a free-form object with fields
 
 }
