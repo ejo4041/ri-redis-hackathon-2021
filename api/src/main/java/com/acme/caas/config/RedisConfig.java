@@ -19,9 +19,10 @@ public class RedisConfig {
         @Value("${spring.redis.host}") String host,
         @Value("${spring.redis.port}") Integer port){
 
-        var pool = new JedisPool("redis://"+host+":"+port+"/1");
-        JReJSON client = new JReJSON(pool);
+//        var pool = new JedisPool("redis://"+host+":"+port+"/1");
+//        JReJSON client = new JReJSON(pool);
 
+        JReJSON client = new JReJSON(host, port);
         return client;
     }
 
