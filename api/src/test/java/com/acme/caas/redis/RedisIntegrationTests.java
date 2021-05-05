@@ -46,8 +46,8 @@ public class RedisIntegrationTests {
     }
 
     @BeforeEach
-    public void setupEach() {
-        redis.del("auto-generated-test");
+    public void setupEach() throws Exception {
+        redisClient.deleteTemplates();
     }
 
     @Test
@@ -71,15 +71,10 @@ public class RedisIntegrationTests {
     public void createUpdateTest() throws Exception {
 
         //Build a CaasTemplate to test with
-        var template = getInitialTemplate();
-
-        //You can't update a template that isn't already created
-        Assert.assertThrows(Exception.class, () -> {
-            redisClient.updateTemplate(template);
-        });
+        var createTemplate = getInitialTemplate();
 
         //add the entire template to redis
-        redisClient.createTemplate(template);
+        CaaSTemplate template = redisClient.createTemplate(createTemplate);
         Assert.assertNotNull(redis.get(template.getSettingsId()));
 
         //Update the name of the template
@@ -102,6 +97,7 @@ public class RedisIntegrationTests {
         //Get a CaasTemplate from redis with key 'auto-generated-test'
         var retrievedTemplate = redisClient.getTemplate(template.getSettingsId());
         var expectedTemplate = getInitialTemplate();
+        expectedTemplate.setSettingsId(template.getSettingsId());
         expectedTemplate.setTemplateName(newName);
         expectedTemplate.setTemplateSettings(Map.of("setting2","value2"));
         Assert.assertNotNull(retrievedTemplate); //the retrieved template isn't null
@@ -121,6 +117,16 @@ public class RedisIntegrationTests {
             redis.get(template.getSettingsId());
         });
 
+    }
+
+    @Test
+    public void listTest() throws Exception {
+
+        var template1 = redisClient.createTemplate(getInitialTemplate());
+        var template2 = redisClient.createTemplate(getInitialTemplate());
+        var template3 = redisClient.createTemplate(getInitialTemplate());
+        var template4 = redisClient.createTemplate(getInitialTemplate());
+        var template5 = redisClient.createTemplate(getInitialTemplate());
     }
 
     public CaaSTemplate getInitialTemplate(){

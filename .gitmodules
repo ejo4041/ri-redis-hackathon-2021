@@ -1,0 +1,3 @@
+[submodule "JRedisJSON"]
+	path = JRedisJSON
+	url = https://github.com/RedisJSON/JRedisJSON.git

@@ -1,6 +1,8 @@
 package com.acme.caas.domain;
 
 import java.util.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 @Data
