@@ -20,7 +20,7 @@
     "reactive": false,
     "authenticationType": "jwt",
     "packageName": "com.acme.caas",
-    "serverPort": "8081",
+    "serverPort": "8082",
     "cacheProvider": "redis",
     "enableHibernateCache": false,
     "databaseType": "no",

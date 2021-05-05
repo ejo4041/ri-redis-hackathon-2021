@@ -53,7 +53,7 @@ Postman scripts are in the postman directory.
 #### API Endpoints
 
 ```shell
-POST http://localhost:8081/api/v1/admin/template/create
+POST http://localhost:8082/api/v1/admin/template/create
 
 {
     "adminName": "James",

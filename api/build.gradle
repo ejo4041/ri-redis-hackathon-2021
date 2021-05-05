@@ -247,6 +247,7 @@ dependencies {
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}"
 
     testImplementation "org.testcontainers:testcontainers"
+    compile 'io.springfox:springfox-swagger-ui:2.9.2'
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
