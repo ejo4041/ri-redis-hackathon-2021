@@ -102,6 +102,7 @@ task integrationTest(type: Test) {
     group = "verification"
     include "**/*IT*", "**/*IntTest*"
     exclude "**/*CucumberIT*"
+    exclude "**/ExceptionTranslatorIT"
 
     testLogging {
         events 'FAILED', 'SKIPPED'

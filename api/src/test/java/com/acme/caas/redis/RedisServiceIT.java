@@ -1,5 +1,7 @@
 package com.acme.caas.redis;
 
+import com.acme.caas.IntegrationTest;
+import com.acme.caas.RedisTestContainerExtension;
 import com.acme.caas.config.WebConfigurer;
 import com.acme.caas.domain.CaaSTemplate;
 import com.acme.caas.service.RedisService;
@@ -9,6 +11,7 @@ import io.cucumber.java.bs.A;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,8 +34,10 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@ActiveProfiles("dev")
-public class RedisIntegrationTests {
+@ActiveProfiles("test")
+@IntegrationTest
+@ExtendWith(RedisTestContainerExtension.class)
+public class RedisServiceIT {
 
     @Autowired
     private RedisService redisClient;

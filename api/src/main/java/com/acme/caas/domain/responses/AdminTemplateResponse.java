@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 public class AdminTemplateResponse extends AdminControllerResponse{
 

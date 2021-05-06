@@ -7,6 +7,7 @@ import com.redislabs.modules.rejson.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,14 +22,18 @@ public class CaasKeyServiceImpl implements CaasKeyService {
 
     private JReJSON redisClient;
 
-    public static final String KEYS_KEY = "caas_keys";
+    public final String KEYS_KEY;
 
-    public static final String KEY_PREFIX = "caas_";
+    public final String KEY_PREFIX;
 
-    public CaasKeyServiceImpl(JReJSON redisClient){
+    public CaasKeyServiceImpl(JReJSON redisClient,
+                              @Value("${caas.redis.key_prefix}") String keyPrefix,
+                              @Value("${caas.redis.key_object}") String keysKey){
         this.redisClient = redisClient;
+        this.KEY_PREFIX = keyPrefix;
+        this.KEYS_KEY = keysKey;
         try{
-            redisClient.set(CaasKeyServiceImpl.KEYS_KEY, new Object(), JReJSON.ExistenceModifier.NOT_EXISTS);
+            redisClient.set(this.KEYS_KEY, new Object(), JReJSON.ExistenceModifier.NOT_EXISTS);
         }catch(Exception e){
         }
     }
@@ -39,7 +44,7 @@ public class CaasKeyServiceImpl implements CaasKeyService {
         Integer count = 0;
         while(!success && count < 2){
             try{
-                redisClient.set(CaasKeyServiceImpl.KEYS_KEY,key, JReJSON.ExistenceModifier.NOT_EXISTS,new Path("."+key));
+                redisClient.set(this.KEYS_KEY,key, JReJSON.ExistenceModifier.NOT_EXISTS,new Path("."+key));
             }catch(RuntimeException e){
                 //create the initial KEYS container object if needed
 
@@ -51,13 +56,13 @@ public class CaasKeyServiceImpl implements CaasKeyService {
     @Override
     public void deleteKey(String key) {
         logger.info("Delete key: " + key);
-        redisClient.del(CaasKeyServiceImpl.KEYS_KEY, new Path("." + key));
+        redisClient.del(this.KEYS_KEY, new Path("." + key));
     }
 
     @Override
     public List<String> getKeys() {
         logger.info("Getting CaasTemplate keys");
-        Map<String, String> keys = redisClient.get(CaasKeyServiceImpl.KEYS_KEY);
+        Map<String, String> keys = redisClient.get(this.KEYS_KEY);
         return keys.keySet().stream().collect(Collectors.toList());
     }
 

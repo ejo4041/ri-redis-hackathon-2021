@@ -14,15 +14,39 @@ import redis.clients.jedis.util.Pool;
 @Configuration
 public class RedisConfig {
 
+    /**
+     * <pre>
+     * try (Jedis jedis = pool.getResource()) {
+     *    jedis.set("foo", "bar");
+     *    String foobar = jedis.get("foo");
+     *    jedis.zadd("sose", 0, "car"); jedis.zadd("sose", 0, "bike");
+     *    Set<String> sose = jedis.zrange("sose", 0, -1);
+     * }
+     * // ... when closing your application:
+     * pool.close();
+     * </pre>
+     *
+     * The JedisPool service allows you to grab a Jedis instance, interact with Redis, then
+     * release it back into the pool. The pool of connections is helpful when you need to use a
+     * jedis client in a blocking manner (pub/sub) and still need other clients for
+     * redis interaction in the mean time. Also, the JReJSON library needs a JedisPool instance
+     * in order to run commands on.
+     * @param host the Host of the redis db
+     * @param port the port of the redis db
+     * @return a JedisPool Object
+     */
     @Bean
-    public JReJSON redisJsonClient(
-        @Value("${spring.redis.host}") String host,
-        @Value("${spring.redis.port}") Integer port){
+    public JedisPool jedisPool(@Value("${spring.redis.host}") String host,
+                               @Value("${spring.redis.port}") Integer port){
+        JedisPoolConfig config = new JedisPoolConfig();
+        var pool = new JedisPool(config,host,port);
+        return pool;
+    }
 
-//        var pool = new JedisPool("redis://"+host+":"+port+"/1");
-//        JReJSON client = new JReJSON(pool);
 
-        JReJSON client = new JReJSON(host, port);
+    @Bean
+    public JReJSON redisJsonClient(JedisPool pool){
+        JReJSON client = new JReJSON(pool);
         return client;
     }
 
