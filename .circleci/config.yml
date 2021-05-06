@@ -40,4 +40,4 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # run tests!
-      - run: gradle test integrationTest jacocoTestReport --stacktrace 
+      - run: gradle build
