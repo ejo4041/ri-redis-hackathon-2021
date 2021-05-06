@@ -14,7 +14,7 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
 
-    working_directory: ~/repo/ri-redis-hackathon-2021/api
+    working_directory: ~/projects/ri-redis-hackathon-2021/api
     build_dir: api
 
     environment:
@@ -40,4 +40,4 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # run tests!
-      - run: gradle test integrationTest jacocoTestReport
+      - run: gradle test integrationTest jacocoTestReport --stacktrace 
