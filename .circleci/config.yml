@@ -42,7 +42,6 @@ jobs:
           path: test-results
 
       # run tests!
-      - run: cd api
-      - run: gradle test integrationTest jacocoTestReport
+      - run: npm run backend:unit:test
       
       
