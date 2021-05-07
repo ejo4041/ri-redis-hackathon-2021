@@ -22,11 +22,19 @@ public class CaaSTemplateUpdate {
 
     private List<String> settingKeys; //the setting key/s that were updated
 
-    private TemplateUpdateType updateType; // what was updated?
+    private TemplateUpdateType updateType; // Create, update, or delete
 
-    public static enum TemplateUpdateType{
+    private TemplateUpdateField updateField; // what was update?
+
+    public static enum TemplateUpdateField{
         NAME,
         SETTINGS,
         OBJECT
+    }
+
+    public static enum TemplateUpdateType{
+        CREATE,
+        UPDATE,
+        DELETE
     }
 }

@@ -183,3 +183,4 @@ spring.autoconfigure.exclude: org.springframework.boot.autoconfigure.security.se
 # Redis key settings
 caas.redis.key_prefix: "caas_"
 caas.redis.key_object: "caas_keys"
+caas.redis.update_topic: "caasUpdates"
