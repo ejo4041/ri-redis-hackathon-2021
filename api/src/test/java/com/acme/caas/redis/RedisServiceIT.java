@@ -93,6 +93,11 @@ public class RedisServiceIT {
         redisClient.updateTemplateData(template.getSettingsId(),settingKey,newSettingValue);
         Assert.assertEquals(newSettingValue,redis.get(template.getSettingsId(),String.class, new Path(".templateSettings."+ settingKey)));
 
+        var addSettingKey = "addSetting";
+        var addSettingValue = "addValue";
+        redisClient.addTemplateData(template.getSettingsId(), addSettingKey, addSettingValue);
+        Assert.assertEquals(addSettingValue, redis.get(template.getSettingsId(), String.class, new Path(".templateSettings."+ addSettingKey)));
+
         //Delete the template setting with key 'setting1'
         redisClient.deleteTemplateData(template.getSettingsId(),settingKey);
         Assert.assertThrows(Exception.class, () -> {
@@ -104,7 +109,7 @@ public class RedisServiceIT {
         var expectedTemplate = getInitialTemplate();
         expectedTemplate.setSettingsId(template.getSettingsId());
         expectedTemplate.setTemplateName(newName);
-        expectedTemplate.setTemplateSettings(Map.of("setting2","value2"));
+        expectedTemplate.setTemplateSettings(Map.of("setting2","value2",addSettingKey, addSettingValue));
         Assert.assertNotNull(retrievedTemplate); //the retrieved template isn't null
         Assert.assertEquals(retrievedTemplate,expectedTemplate); //the retrieved template is what was expected
 
