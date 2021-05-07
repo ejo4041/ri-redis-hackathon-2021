@@ -1,6 +1,8 @@
 package com.acme.caas.service.impl;
 
 import com.acme.caas.domain.CaaSTemplate;
+import com.acme.caas.domain.errors.MustExistException;
+import com.acme.caas.domain.errors.MustNotExistException;
 import com.acme.caas.service.CaasKeyService;
 import com.acme.caas.service.RedisService;
 import com.google.gson.Gson;
@@ -75,17 +77,36 @@ public class RedisServiceImpl implements RedisService {
             redisClient.set(caasTemplate.getSettingsId(),caasTemplate, JReJSON.ExistenceModifier.MUST_EXIST);
         }catch(RuntimeException e){
             logger.error("Failed to update the given CaasTemplate. Ensure the CaasTemplate already exists", e);
-            throw new Exception(e);
+            throw new MustExistException(caasTemplate.getSettingsId(),e);
         }
 
         logger.info("Redis template updated");
     }
 
     @Override
+    public void addTemplateData(String settingsId, String settingsKey, Object settingsValue) throws Exception {
+        logger.info("Adding template setting '" + settingsKey + "' in Redis");
+
+        var path = new Path(".templateSettings."+settingsKey);
+        try{
+            redisClient.set(settingsId, settingsValue, JReJSON.ExistenceModifier.NOT_EXISTS, path);
+        }catch(RuntimeException e){
+            throw new MustNotExistException(settingsId, path, e);
+        }
+
+        logger.info("Redis template setting '" + settingsKey + "' added");
+    }
+
+    @Override
     public void updateTemplateData(String settingsId, String settingsKey, Object settingsValue) throws Exception {
         logger.info("Updating template setting '" + settingsKey + "' in Redis");
 
-        redisClient.set(settingsId,settingsValue, new Path(".templateSettings."+settingsKey));
+        var path = new Path(".templateSettings."+settingsKey);
+        try{
+            redisClient.set(settingsId,settingsValue, JReJSON.ExistenceModifier.MUST_EXIST, path);
+        }catch(RuntimeException e){
+            throw new MustExistException(settingsId, path, e);
+        }
 
         logger.info("Redis template setting '" + settingsKey + "' updated");
     }

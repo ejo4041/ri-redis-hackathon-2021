@@ -10,6 +10,8 @@ public interface RedisService {
 
     public void updateTemplate(CaaSTemplate caasTemplate) throws Exception;
 
+    public void addTemplateData(String settingsId, String settingsKey, Object settingsValue) throws Exception;
+
     public void updateTemplateData(String settingsId, String settingsKey, Object settingsValue) throws Exception;
 
     public void deleteTemplateData(String settingsId, String settingsKey) throws Exception;

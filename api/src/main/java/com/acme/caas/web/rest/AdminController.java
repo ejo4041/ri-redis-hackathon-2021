@@ -1,6 +1,7 @@
 package com.acme.caas.web.rest;
 
 import com.acme.caas.domain.CaaSTemplate;
+import com.acme.caas.domain.errors.MustNotExistException;
 import com.acme.caas.domain.responses.AdminControllerResponse;
 import com.acme.caas.domain.responses.AdminTemplatesResponse;
 import com.acme.caas.domain.responses.AdminTemplateResponse;
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.Map;
 import java.util.MissingFormatArgumentException;
 
 @CrossOrigin
@@ -53,6 +55,22 @@ public class AdminController {
         AdminTemplateResponse response = new AdminTemplateResponse();
         response.setMessage("Template Saved!");
         response.setTemplate(returnTemplate);
+        return response;
+    }
+
+    @PostMapping(path = "/template/create/{id}/templateSetting", consumes = "application/json", produces = "application/json")
+    public AdminControllerResponse addTemplateData(@PathVariable("id") String settingsId,
+                                                 @RequestBody @NotNull Map.Entry<String, Object> templateSetting) throws Exception, MustNotExistException {
+        logger.info("/template/create/" + settingsId + "/templateSetting");
+        logger.debug("Template Setting: [" + templateSetting.getKey() + "]: " + templateSetting.getValue() );
+
+        redisService.addTemplateData(settingsId, templateSetting.getKey(), templateSetting.getValue());
+
+        // Respond
+        AdminControllerResponse response = new AdminControllerResponse();
+        response.setMessage("Template ");
+
+        response.setMessage("Data for template " + settingsId + " was added: [" + templateSetting.getKey() + "]: " + templateSetting.getValue());
         return response;
     }
 
@@ -100,7 +118,7 @@ public class AdminController {
         return response;
     }
 
-    @PostMapping(path = "/template/update/{id}/templateName/{name}", produces = "application/json")
+    @PutMapping(path = "/template/update/{id}/templateName/{name}", produces = "application/json")
     public AdminControllerResponse updateTemplate(@PathVariable("id") @NotNull String settingsId,
                                                 @PathVariable("name") @NotNull String templateName) throws Exception {
         logger.info("/template/update/templateName");
@@ -111,6 +129,47 @@ public class AdminController {
         // Respond
         AdminControllerResponse response = new AdminControllerResponse();
         response.setMessage("Template name updated to " + templateName);
+        return response;
+    }
+
+    @PutMapping(path = "/template/update/{id}/templateSetting", produces = "application/json")
+    public AdminControllerResponse updateTemplateData(@PathVariable("id") @NotNull String settingsId,
+                                                      @RequestBody @NotNull Map.Entry<String, Object> templateSetting) throws Exception {
+        logger.info("/template/update/"+ settingsId + "/templateSetting");
+        logger.debug("Template Setting: [" + templateSetting.getKey() + "]: " + templateSetting.getValue() );
+
+        redisService.updateTemplateData(settingsId, templateSetting.getKey(), templateSetting.getValue());
+
+        // Respond
+        AdminControllerResponse response = new AdminControllerResponse();
+        response.setMessage("Data for template " + settingsId + " was updated: [" + templateSetting.getKey() + "]: " + templateSetting.getValue());
+        return response;
+    }
+
+    @DeleteMapping(path = "/template/delete/{id}", produces = "application/json")
+    public AdminControllerResponse deleteTemplate(@PathVariable("id") @NotNull String settingsId) throws Exception {
+        logger.info("/template/delete");
+        logger.debug("Template: " + settingsId);
+
+        redisService.deleteTemplate(settingsId);
+
+        // Respond
+        AdminControllerResponse response = new AdminControllerResponse();
+        response.setMessage("Template deleted with settingsId: " + settingsId);
+        return response;
+    }
+
+    @DeleteMapping(path = "/template/delete/{id}/templateSetting/{key}", produces = "application/json")
+    public AdminControllerResponse deleteTemplateData(@PathVariable("id") @NotNull String settingsId,
+                                                      @PathVariable("key") @NotNull String templateDataKey) throws Exception {
+        logger.info("/template/delete/"+ settingsId + "/templateSetting/"+ templateDataKey);
+        logger.debug("Template: " + settingsId);
+
+        redisService.deleteTemplateData(settingsId, templateDataKey);
+
+        // Respond
+        AdminControllerResponse response = new AdminControllerResponse();
+        response.setMessage("Template data with key " + templateDataKey + " was removed from template " + settingsId);
         return response;
     }
 }
