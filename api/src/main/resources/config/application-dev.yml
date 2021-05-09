@@ -45,7 +45,7 @@ spring:
         enabled: true
 
 server:
-  port: 8081
+  port: 8082
 
 # ===================================================================
 # JHipster specific properties
@@ -98,3 +98,7 @@ jhipster:
 spring.redis.host: localhost
 spring.redis.port: 6379
 spring.autoconfigure.exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+
+# Redis key settings
+caas.redis.key_prefix: "caas_dev_"
+caas.redis.key_object: "caas_keys_dev"

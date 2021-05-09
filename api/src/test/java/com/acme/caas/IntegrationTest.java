@@ -8,6 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
  * Base composite annotation for integration tests.
@@ -16,5 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Retention(RetentionPolicy.RUNTIME)
 @SpringBootTest(classes = ApiApp.class)
 @ExtendWith(RedisTestContainerExtension.class)
+@ActiveProfiles("test")
 public @interface IntegrationTest {
 }
