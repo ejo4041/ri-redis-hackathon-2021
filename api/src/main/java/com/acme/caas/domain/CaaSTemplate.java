@@ -1,5 +1,6 @@
 package com.acme.caas.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import lombok.*;
 @Builder
 public class CaaSTemplate {
 
-    private String adminName;
+    private String settingsId;
     private String templateName;
-    private List<HashMap<String, Object>> templateData;
+    private Map<String, Object> templateSettings; //HashMap as a mapping for a free-form object with fields
 }

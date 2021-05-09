@@ -23,6 +23,19 @@ https://redislabs.com/redis-enterprise/redis-insight/
 cd redis
 docker-compose up
 ```
+
+#### Connecting local Redis to RedisInsight
+1. Download RedisInsight from the link above
+2. Install and run the app. 
+3. Navigate to http://localhost:8001.
+4. Select "I already have a database"
+5. Select "Connect to a Redis Database using hostname and port"
+6. Enter the following values
+    1. host: localhost
+    2. port: 6379
+    3. name: anything you want here
+7. Now, select the redis database you just created in the UI
+
 ### API
 
 Make sure REDIS docker container is started first as the API service will try to connect to it.
@@ -39,18 +52,29 @@ Postman scripts are in the postman directory.
 
 #### API Endpoints
 
+Swagger UI:
+http://localhost:8081/swagger-ui.html
+
 ```shell
 POST http://localhost:8081/api/v1/admin/template/create
 
 {
-    "adminName": "James",
+    "settingsId": "James",
     "templateName": "Test",
-    "templateData": [
-        {"first_name":"fname"},
-        {"last_name":"lname"}
-    ]
+    "templateSettings": {
+        "first_name":"fname",
+        "last_name":"lname"
+    }
 }
 ```
+
+#### API Security
+
+To enable security on /api/v1/admin API endpoints, uncomment the following line in the SecurityConfiguration.java file:
+
+```//.antMatchers("/api/v1/admin/**").authenticated()
+
+API requests will then require a Bearer Token header with a valid JWT Token as a value.
 
 ### KeyCloak For Authentication
 

@@ -1,12 +1,14 @@
-package com.acme.caas.domain;
+package com.acme.caas.domain.responses;
 
+import java.util.List;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@Builder
+@SuperBuilder
 public class AdminControllerResponse {
 
     private String message;
