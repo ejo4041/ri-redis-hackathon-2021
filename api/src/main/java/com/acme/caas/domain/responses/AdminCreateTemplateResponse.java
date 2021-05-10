@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public class AdminCreateTemplateResponse extends AdminTemplateResponse{
+public class AdminCreateTemplateResponse extends AdminTemplateResponse {
 
     private String settingsId;
 }

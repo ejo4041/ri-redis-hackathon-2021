@@ -1,9 +1,8 @@
 package com.acme.caas.domain.responses;
 
+import java.util.List;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor

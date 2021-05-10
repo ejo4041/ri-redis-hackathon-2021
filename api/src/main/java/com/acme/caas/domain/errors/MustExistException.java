@@ -4,7 +4,7 @@ import com.acme.caas.web.rest.errors.ErrorConstants;
 import com.redislabs.modules.rejson.Path;
 import org.zalando.problem.Status;
 
-public class MustExistException extends IllegalArgumentException{
+public class MustExistException extends IllegalArgumentException {
 
     public String redisKey;
 

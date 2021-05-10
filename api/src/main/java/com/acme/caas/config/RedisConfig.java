@@ -36,16 +36,14 @@ public class RedisConfig {
      * @return a JedisPool Object
      */
     @Bean
-    public JedisPool jedisPool(@Value("${spring.redis.host}") String host,
-                               @Value("${spring.redis.port}") Integer port){
+    public JedisPool jedisPool(@Value("${spring.redis.host}") String host, @Value("${spring.redis.port}") Integer port) {
         JedisPoolConfig config = new JedisPoolConfig();
-        var pool = new JedisPool(config,host,port);
+        var pool = new JedisPool(config, host, port);
         return pool;
     }
 
-
     @Bean
-    public JReJSON redisJsonClient(JedisPool pool){
+    public JReJSON redisJsonClient(JedisPool pool) {
         JReJSON client = new JReJSON(pool);
         return client;
     }

@@ -1,19 +1,17 @@
 package com.acme.caas.service.impl;
 
-
 import com.acme.caas.service.CaasKeyService;
 import com.redislabs.modules.rejson.JReJSON;
 import com.redislabs.modules.rejson.Path;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class CaasKeyServiceImpl implements CaasKeyService {
@@ -26,26 +24,27 @@ public class CaasKeyServiceImpl implements CaasKeyService {
 
     public final String KEY_PREFIX;
 
-    public CaasKeyServiceImpl(JReJSON redisClient,
-                              @Value("${caas.redis.key_prefix}") String keyPrefix,
-                              @Value("${caas.redis.key_object}") String keysKey){
+    public CaasKeyServiceImpl(
+        JReJSON redisClient,
+        @Value("${caas.redis.key_prefix}") String keyPrefix,
+        @Value("${caas.redis.key_object}") String keysKey
+    ) {
         this.redisClient = redisClient;
         this.KEY_PREFIX = keyPrefix;
         this.KEYS_KEY = keysKey;
-        try{
+        try {
             redisClient.set(this.KEYS_KEY, new Object(), JReJSON.ExistenceModifier.NOT_EXISTS);
-        }catch(Exception e){
-        }
+        } catch (Exception e) {}
     }
 
     @Override
     public void addKey(String key) throws Exception {
         boolean success = false;
         Integer count = 0;
-        while(!success && count < 2){
-            try{
-                redisClient.set(this.KEYS_KEY,key, JReJSON.ExistenceModifier.NOT_EXISTS,new Path("."+key));
-            }catch(RuntimeException e){
+        while (!success && count < 2) {
+            try {
+                redisClient.set(this.KEYS_KEY, key, JReJSON.ExistenceModifier.NOT_EXISTS, new Path("." + key));
+            } catch (RuntimeException e) {
                 //create the initial KEYS container object if needed
 
             }
@@ -68,6 +67,6 @@ public class CaasKeyServiceImpl implements CaasKeyService {
 
     @Override
     public String generateKey() {
-        return KEY_PREFIX + UUID.randomUUID().toString().replace("-","_");
+        return KEY_PREFIX + UUID.randomUUID().toString().replace("-", "_");
     }
 }

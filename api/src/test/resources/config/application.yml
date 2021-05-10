@@ -61,12 +61,13 @@ jhipster:
       port: 5000
       queue-size: 512
   security:
-    authentication:
-      jwt:
-        # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
-        base64-secret: MzgyOTVmZGIzMjg1MzBiNDA4MzVjNzZiZWJkNzNiYmM2ZGUxYjc3NzcwYWRlNmQ5MDlmNjVkOGYzNzRmMGI5ZGU3YTA0YjM3ZWEyNzFiYjVmOGUxMzMzYzM5NjJkYjMxYTc0ZGI3YTY4YmMwMzFhMmQxNzY3NmQ0YWU0NTk3NDk=
-        # Token is valid 24 hours
-        token-validity-in-seconds: 86400
+    # authentication:
+    #   jwt:
+    #     # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
+    #     base64-secret: MzgyOTVmZGIzMjg1MzBiNDA4MzVjNzZiZWJkNzNiYmM2ZGUxYjc3NzcwYWRlNmQ5MDlmNjVkOGYzNzRmMGI5ZGU3YTA0YjM3ZWEyNzFiYjVmOGUxMzMzYzM5NjJkYjMxYTc0ZGI3YTY4YmMwMzFhMmQxNzY3NmQ0YWU0NTk3NDk=
+    #     # Token is valid 24 hours
+    #     token-validity-in-seconds: 86400
+    authentication.jwt.base64-secret: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApTq/1mdrOKYj0HGYYiOf9vNQ0/7tkhXKTnum8bQb2z0iPvhAHTzlq6deRRtY269oPmiXTCF7WarvlfEXqOdRlDk538mYsdotwI9fnajo0L4IgMvWgPhFI8pFBitY5+8s0AJl6BLraeF1N9CIqde3mpkw1eHxA+6PVyhG7w9NxoSOK3QMqsexKqJxp5FadacZU0CP/BFFeK5zwv+IV6g4FhDSWXfHqAZbsL84ZjLGbBY1qwnpNewQl79YGRjkwDm707IMKjUJK0K3/dviwNIJ9sE+Yc/IXRDsMlLlYI20496oBNdX/td41ipKMJ0ZTMjV99DbCclmdpWwQ7hrxgi1EwIDAQAB
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
@@ -80,3 +81,7 @@ jhipster:
 spring.redis.host: localhost
 spring.redis.port: 6379
 spring.autoconfigure.exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+
+# keycloak
+keycloak.server.url.auth: http://localhost:8080/auth/realms/CaaS/protocol/openid-connect/token
+keycloak.server.url.verifyToken: http://localhost:8080/auth/realms/CaaS/protocol/openid-connect/userinfo

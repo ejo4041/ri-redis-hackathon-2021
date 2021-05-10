@@ -1,8 +1,7 @@
 package com.acme.caas.domain;
 
-import lombok.*;
-
 import java.util.List;
+import lombok.*;
 
 /**
  * When an update occurs, this gets pushed into the redis update channel to alert subscribers
@@ -16,6 +15,7 @@ import java.util.List;
 @EqualsAndHashCode
 @Builder
 public class CaaSTemplateUpdate {
+
     private String settingsId;
 
     private String name; //what was the name updated to
@@ -26,15 +26,15 @@ public class CaaSTemplateUpdate {
 
     private TemplateUpdateField updateField; // what was update?
 
-    public static enum TemplateUpdateField{
+    public static enum TemplateUpdateField {
         NAME,
         SETTINGS,
-        OBJECT
+        OBJECT,
     }
 
-    public static enum TemplateUpdateType{
+    public static enum TemplateUpdateType {
         CREATE,
         UPDATE,
-        DELETE
+        DELETE,
     }
 }

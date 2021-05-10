@@ -2,7 +2,7 @@ package com.acme.caas.domain.errors;
 
 import com.redislabs.modules.rejson.Path;
 
-public class MustNotExistException extends IllegalArgumentException{
+public class MustNotExistException extends IllegalArgumentException {
 
     public String redisKey;
 

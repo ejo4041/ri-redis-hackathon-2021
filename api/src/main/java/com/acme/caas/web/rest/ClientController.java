@@ -23,6 +23,4 @@ public class ClientController {
     public ClientController(RedisService _redisService) {
         this.redisService = _redisService;
     }
-
-
 }

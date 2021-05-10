@@ -1,8 +1,8 @@
 package com.acme.caas;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.AfterAllCallback;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.testcontainers.containers.GenericContainer;
 
@@ -16,11 +16,10 @@ public class RedisTestContainerExtension implements BeforeAllCallback, AfterAllC
     public void beforeAll(ExtensionContext extensionContext) throws Exception {
         if (!started.get()) {
             redis.start();
-            System.setProperty("test.redis.server.port",redis.getMappedPort(6379).toString());
+            System.setProperty("test.redis.server.port", redis.getMappedPort(6379).toString());
             System.setProperty("jhipster.cache.redis.server", "redis://" + redis.getContainerIpAddress() + ":" + redis.getMappedPort(6379));
             started.set(true);
         }
-
     }
 
     @Override

@@ -7,11 +7,10 @@ import com.acme.caas.service.CaasKeyService;
 import com.acme.caas.service.RedisService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.redislabs.modules.rejson.JReJSON;
 import com.redislabs.modules.rejson.Path;
+import java.util.*;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,18 +39,18 @@ public class RedisServiceImpl implements RedisService {
         RuntimeException exception = null;
         CaaSTemplate template = null;
 
-        while(template == null && count < 25){
-            try{
+        while (template == null && count < 25) {
+            try {
                 caasTemplate.setSettingsId(keyService.generateKey());
-                redisClient.set(caasTemplate.getSettingsId(),caasTemplate, JReJSON.ExistenceModifier.NOT_EXISTS);
+                redisClient.set(caasTemplate.getSettingsId(), caasTemplate, JReJSON.ExistenceModifier.NOT_EXISTS);
                 template = caasTemplate;
                 keyService.addKey(caasTemplate.getSettingsId());
-            }catch(RuntimeException e){
+            } catch (RuntimeException e) {
                 exception = e;
             }
             count++;
         }
-        if(template == null){
+        if (template == null) {
             logger.error("Could not create template in Redis");
             throw new Exception(exception);
         }
@@ -60,7 +59,6 @@ public class RedisServiceImpl implements RedisService {
 
         return template;
     }
-
 
     /**
      * This method will update the entire value of the provided CaaSTemplate, given that the template
@@ -73,11 +71,11 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public void updateTemplate(CaaSTemplate caasTemplate) throws Exception {
         logger.info("Updating template in Redis");
-        try{
-            redisClient.set(caasTemplate.getSettingsId(),caasTemplate, JReJSON.ExistenceModifier.MUST_EXIST);
-        }catch(RuntimeException e){
+        try {
+            redisClient.set(caasTemplate.getSettingsId(), caasTemplate, JReJSON.ExistenceModifier.MUST_EXIST);
+        } catch (RuntimeException e) {
             logger.error("Failed to update the given CaasTemplate. Ensure the CaasTemplate already exists", e);
-            throw new MustExistException(caasTemplate.getSettingsId(),e);
+            throw new MustExistException(caasTemplate.getSettingsId(), e);
         }
 
         logger.info("Redis template updated");
@@ -87,10 +85,10 @@ public class RedisServiceImpl implements RedisService {
     public void addTemplateData(String settingsId, String settingsKey, Object settingsValue) throws Exception {
         logger.info("Adding template setting '" + settingsKey + "' in Redis");
 
-        var path = new Path(".templateSettings."+settingsKey);
-        try{
+        var path = new Path(".templateSettings." + settingsKey);
+        try {
             redisClient.set(settingsId, settingsValue, JReJSON.ExistenceModifier.NOT_EXISTS, path);
-        }catch(RuntimeException e){
+        } catch (RuntimeException e) {
             throw new MustNotExistException(settingsId, path, e);
         }
 
@@ -101,10 +99,10 @@ public class RedisServiceImpl implements RedisService {
     public void updateTemplateData(String settingsId, String settingsKey, Object settingsValue) throws Exception {
         logger.info("Updating template setting '" + settingsKey + "' in Redis");
 
-        var path = new Path(".templateSettings."+settingsKey);
-        try{
-            redisClient.set(settingsId,settingsValue, JReJSON.ExistenceModifier.MUST_EXIST, path);
-        }catch(RuntimeException e){
+        var path = new Path(".templateSettings." + settingsKey);
+        try {
+            redisClient.set(settingsId, settingsValue, JReJSON.ExistenceModifier.MUST_EXIST, path);
+        } catch (RuntimeException e) {
             throw new MustExistException(settingsId, path, e);
         }
 
@@ -115,7 +113,7 @@ public class RedisServiceImpl implements RedisService {
     public void deleteTemplateData(String settingsId, String settingsKey) throws Exception {
         logger.info("Deleting template setting '" + settingsKey + "' in Redis");
 
-        redisClient.del(settingsId, new Path(".templateSettings."+settingsKey));
+        redisClient.del(settingsId, new Path(".templateSettings." + settingsKey));
 
         logger.info("Redis template setting '" + settingsKey + "' deleted");
     }
@@ -124,7 +122,7 @@ public class RedisServiceImpl implements RedisService {
     public void updateTemplateName(String settingsId, String name) throws Exception {
         logger.info("Updating template name in Redis");
 
-        redisClient.set(settingsId,name, new Path(".templateName"));
+        redisClient.set(settingsId, name, new Path(".templateName"));
 
         logger.info("Redis template name updated");
     }
@@ -133,22 +131,22 @@ public class RedisServiceImpl implements RedisService {
     public CaaSTemplate getTemplate(String settingsId) throws Exception {
         logger.info("Loading template with id '" + settingsId + "' in Redis");
 
-        var template = redisClient.get(settingsId, CaaSTemplate.class,Path.ROOT_PATH);
-//        var template = CaaSTemplate.builder()
-//            .settingsId(jsonTemplate.get("settingsId").getAsString())
-//            .templateName(jsonTemplate.get("templateName").getAsString())
-//            .templateSettings(new ArrayList<>())
-//            .build();
-//        jsonTemplate.get("template")
-//            .getAsJsonObject()
-//            .entrySet()
-//            .forEach(
-//                entry -> {
-//                    var clazz = redisClient.type(settingsId, new Path(".template." + entry.getKey()));
-//                    template.getTemplateSettings()
-//                        .add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().))
-//                }
-//            );
+        var template = redisClient.get(settingsId, CaaSTemplate.class, Path.ROOT_PATH);
+        //        var template = CaaSTemplate.builder()
+        //            .settingsId(jsonTemplate.get("settingsId").getAsString())
+        //            .templateName(jsonTemplate.get("templateName").getAsString())
+        //            .templateSettings(new ArrayList<>())
+        //            .build();
+        //        jsonTemplate.get("template")
+        //            .getAsJsonObject()
+        //            .entrySet()
+        //            .forEach(
+        //                entry -> {
+        //                    var clazz = redisClient.type(settingsId, new Path(".template." + entry.getKey()));
+        //                    template.getTemplateSettings()
+        //                        .add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().))
+        //                }
+        //            );
 
         logger.info("template with id '" + settingsId + "' loaded");
         return template;
@@ -158,7 +156,7 @@ public class RedisServiceImpl implements RedisService {
     public List<CaaSTemplate> getTemplates() throws Exception {
         logger.info("Loading all templates in Redis");
 
-        List<CaaSTemplate> templates = redisClient.mget(CaaSTemplate.class,keyService.getKeys().toArray(String[]::new));
+        List<CaaSTemplate> templates = redisClient.mget(CaaSTemplate.class, keyService.getKeys().toArray(String[]::new));
 
         logger.info(templates.size() + " templates loaded from Redis");
         return templates;
@@ -169,7 +167,7 @@ public class RedisServiceImpl implements RedisService {
         logger.info("Loading setting '" + settingKey + "' in template with id '" + settingsId + "'");
 
         var path = new Path(".templateSettings." + settingKey);
-        var setting = redisClient.get(settingsId,redisClient.type(settingsId,path),path);
+        var setting = redisClient.get(settingsId, redisClient.type(settingsId, path), path);
 
         logger.info("Loaded template setting '" + settingKey + "'");
         return setting;
@@ -177,16 +175,20 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public List<Object> getTemplateSettings(String settingsId, List<String> settingKeys) throws Exception {
-        return settingKeys.stream().map(
-            key -> {
-                try {
-                    return getTemplateSettings(settingsId, key);
-                } catch (Exception e) {
-                    e.printStackTrace();
+        return settingKeys
+            .stream()
+            .map(
+                key -> {
+                    try {
+                        return getTemplateSettings(settingsId, key);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
                 }
-                return null;
-            }
-        ).filter(entry -> entry != null).collect(Collectors.toList());
+            )
+            .filter(entry -> entry != null)
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -195,7 +197,7 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public void deleteTemplate(String settingsId) throws Exception{
+    public void deleteTemplate(String settingsId) throws Exception {
         logger.info("Deleting template with id '" + settingsId + "' in Redis");
 
         redisClient.del(settingsId);
@@ -209,12 +211,13 @@ public class RedisServiceImpl implements RedisService {
         logger.info("Deleting all templates in Redis");
 
         var keys = keyService.getKeys();
-        keys.forEach(key -> {
-            redisClient.del(key);
-            keyService.deleteKey(key);
-        });
+        keys.forEach(
+            key -> {
+                redisClient.del(key);
+                keyService.deleteKey(key);
+            }
+        );
 
         logger.info(keys.size() + " templates deleted from Redis");
     }
-
 }

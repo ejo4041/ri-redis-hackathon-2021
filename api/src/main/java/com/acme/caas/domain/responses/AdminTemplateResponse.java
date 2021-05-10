@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public class AdminTemplateResponse extends AdminControllerResponse{
+public class AdminTemplateResponse extends AdminControllerResponse {
 
     private CaaSTemplate template;
 }

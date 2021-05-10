@@ -100,5 +100,5 @@ spring.redis.port: ${test.redis.server.port}
 spring.autoconfigure.exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
 
 # Redis key settings
-caas.redis.key_prefix: "caas_test_"
-caas.redis.key_object: "caas_keys_test"
+caas.redis.key_prefix: 'caas_test_'
+caas.redis.key_object: 'caas_keys_test'
