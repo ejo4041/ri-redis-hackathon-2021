@@ -89,3 +89,14 @@ Keycloak docker compose and configuration artifacts are in the keycloak director
      1. Import the CaaS Realm from the caa-real-export.json file in this directory to create the realm.
 1. Create a user account and set the password in the Credentials Tab (turn off Temporary)
 1. The Authentication and JWT Verify Token API Endpoints examples are postman scripts in ./api/postman. 
+
+
+#### React app
+
+Running below should start the react app on port 3000
+
+```shell
+cd app
+npm install
+npm start
+```

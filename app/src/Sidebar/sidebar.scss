@@ -2,9 +2,12 @@
     background: #333;
     overflow: hidden;
     height: 100vh;
+    display: flex;
+    flex-flow: column;
+    width: 70px;
 
   .SidebarIcon {
-    padding: 20px;
+    padding: 10px 0;
     color: #FFF;
     &:hover, &.active {
       background: #999;
