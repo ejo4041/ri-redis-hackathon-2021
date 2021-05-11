@@ -39,9 +39,9 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
       
       - store_test_results:
-          path: test-results
+          path: api/test-results
 
       # run tests!
-      - run: npm run backend:unit:test
+      - run: gradle build
       
       
