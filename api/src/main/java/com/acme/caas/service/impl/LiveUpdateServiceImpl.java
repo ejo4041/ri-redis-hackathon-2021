@@ -1,12 +1,16 @@
 package com.acme.caas.service.impl;
 
 import com.acme.caas.domain.CaaSTemplateUpdate;
+import com.acme.caas.domain.RedisWebSocketSession;
 import com.acme.caas.service.LiveUpdateService;
+import com.acme.caas.service.RedisService;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
@@ -14,10 +18,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
+import org.springframework.stereotype.Service;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.adapter.standard.StandardWebSocketSession;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPubSub;
 
+@Service
 public class LiveUpdateServiceImpl implements LiveUpdateService {
 
     private static final Logger logger = LoggerFactory.getLogger(LiveUpdateServiceImpl.class);
@@ -32,16 +42,23 @@ public class LiveUpdateServiceImpl implements LiveUpdateService {
 
     private Gson gson;
 
+    private JdkSerializationRedisSerializer jdkSerializer;
+
+    private final String SOCKET_LIST;
+
     public LiveUpdateServiceImpl(
         @Value("${caas.redis.update_topic:update}") String updateTopic,
+        @Value("${caas.redis.socket_list}") String socketList,
         Executor asyncExecutor,
         JedisPool jedisPool
     ) {
         this.asyncExecutor = asyncExecutor;
         this.jedisPool = jedisPool;
         this.UPDATE_TOPIC = updateTopic;
+        this.SOCKET_LIST = socketList;
         this.gson = new Gson();
         templateUpdates = PublishSubject.create();
+        jdkSerializer = new JdkSerializationRedisSerializer(RedisWebSocketSession.class.getClassLoader());
 
         //subscribe to redis pub/sub updates and pipe them to the templateUpdates Subject for reactive ingestion
         this.asyncExecutor.execute(
@@ -53,6 +70,7 @@ public class LiveUpdateServiceImpl implements LiveUpdateService {
                                 System.out.println("Channel " + channel + " has sent a message : " + message);
                                 try {
                                     var templateUpdate = gson.fromJson(message, CaaSTemplateUpdate.class);
+                                    handleUpdate(templateUpdate, message);
                                 } catch (JsonSyntaxException syntaxException) {
                                     logger.error(
                                         "JSON syntax error on message received from channel [" +
@@ -94,6 +112,28 @@ public class LiveUpdateServiceImpl implements LiveUpdateService {
 
     public Observable<CaaSTemplateUpdate> getTemplateUpdates() {
         return (Observable<CaaSTemplateUpdate>) this.templateUpdates;
+    }
+
+    private void handleUpdate(CaaSTemplateUpdate update, String updateJson){
+
+        TextMessage message = new TextMessage(updateJson);
+        getWebsocketSessions().forEach(session -> {
+            List<CaaSTemplateUpdate.TemplateUpdateType> updateTypes = (List<CaaSTemplateUpdate.TemplateUpdateType>)session
+                .getAttributes()
+                .get(LiveUpdateService.UPDATE_TYPE);
+            List<CaaSTemplateUpdate.TemplateUpdateField> updateFields = (List<CaaSTemplateUpdate.TemplateUpdateField>)session
+                .getAttributes()
+                .get(LiveUpdateService.UPDATE_FIELD);
+            //Does this session care about this update?
+            if(updateTypes.contains(update.getUpdateType()) && updateFields.contains(update.getUpdateField())){
+                try {
+                    session.sendMessage(message);
+                } catch (IOException e) {
+                    logger.error("Error Sending CaaSTemplateUpdate to WebSocket Session: " + session.getId() + " with error: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
@@ -138,6 +178,21 @@ public class LiveUpdateServiceImpl implements LiveUpdateService {
             .build();
 
         publishUpdate(update);
+    }
+
+    @Override
+    public void registerWebsocketSession(WebSocketSession session) {
+
+    }
+
+    @Override
+    public void removeWebsocketSession(WebSocketSession session) {
+
+    }
+
+    @Override
+    public List<WebSocketSession> getWebsocketSessions() {
+        return null;
     }
 
     private void publishUpdate(CaaSTemplateUpdate update) {
