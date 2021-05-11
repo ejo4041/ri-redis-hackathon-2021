@@ -42,6 +42,5 @@ jobs:
           path: test-results
 
       # run tests!
-      - run: npm run backend:unit:test
-      
+      - run: gradle build
       
