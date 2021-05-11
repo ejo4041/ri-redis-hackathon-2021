@@ -8,6 +8,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.adapter.standard.StandardWebSocketSession;
 
 import java.util.List;
+import java.util.Map;
 
 public interface LiveUpdateService {
 
@@ -19,7 +20,7 @@ public interface LiveUpdateService {
 
     public void publishFullUpdate(String settingsId, CaaSTemplateUpdate.TemplateUpdateType updateType);
 
-    public void publishSettingsUpdate(String settingsId, List<String> settingKeys, CaaSTemplateUpdate.TemplateUpdateType updateType);
+    public void publishSettingsUpdate(String settingsId, Map<String, Object> templateSettings, CaaSTemplateUpdate.TemplateUpdateType updateType);
 
     public void registerWebsocketSession(WebSocketSession session);
 

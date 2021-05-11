@@ -11,7 +11,10 @@ import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -36,8 +39,6 @@ public class LiveUpdateServiceImpl implements LiveUpdateService {
 
     private Executor asyncExecutor;
 
-    private PublishSubject<CaaSTemplateUpdate> templateUpdates;
-
     public final String UPDATE_TOPIC;
 
     private Gson gson;
@@ -45,6 +46,8 @@ public class LiveUpdateServiceImpl implements LiveUpdateService {
     private JdkSerializationRedisSerializer jdkSerializer;
 
     private final String SOCKET_LIST;
+
+    private Set<WebSocketSession> sessionList;
 
     public LiveUpdateServiceImpl(
         @Value("${caas.redis.update_topic:update}") String updateTopic,
@@ -57,10 +60,10 @@ public class LiveUpdateServiceImpl implements LiveUpdateService {
         this.UPDATE_TOPIC = updateTopic;
         this.SOCKET_LIST = socketList;
         this.gson = new Gson();
-        templateUpdates = PublishSubject.create();
         jdkSerializer = new JdkSerializationRedisSerializer(RedisWebSocketSession.class.getClassLoader());
+        sessionList = new HashSet<>();
 
-        //subscribe to redis pub/sub updates and pipe them to the templateUpdates Subject for reactive ingestion
+        //subscribe to redis pub/sub updates
         this.asyncExecutor.execute(
                 () -> {
                     try (Jedis jedis = jedisPool.getResource()) {
@@ -104,14 +107,12 @@ public class LiveUpdateServiceImpl implements LiveUpdateService {
                         };
 
                         //Subscribe to all types of template updates
-                        jedis.subscribe(jedisPubSub, UPDATE_TOPIC + "*");
-                    }
+                       // jedis.subscribe(jedisPubSub, UPDATE_TOPIC + ".*");
+                        jedis.subscribe(jedisPubSub, UPDATE_TOPIC );
+                        System.out.println("Passed subscribe");
+                   }
                 }
             );
-    }
-
-    public Observable<CaaSTemplateUpdate> getTemplateUpdates() {
-        return (Observable<CaaSTemplateUpdate>) this.templateUpdates;
     }
 
     private void handleUpdate(CaaSTemplateUpdate update, String updateJson){
@@ -166,13 +167,13 @@ public class LiveUpdateServiceImpl implements LiveUpdateService {
     }
 
     @Override
-    public void publishSettingsUpdate(String settingsId, List<String> settingKeys, CaaSTemplateUpdate.TemplateUpdateType updateType) {
-        logger.info("Updating setting/s [" + settingKeys.stream().collect(Collectors.joining(",")) + "] for Template [" + settingsId + "]");
+    public void publishSettingsUpdate(String settingsId, Map<String, Object> templateSettings, CaaSTemplateUpdate.TemplateUpdateType updateType) {
+        logger.info("Updating setting/s [" + templateSettings.keySet().stream().collect(Collectors.joining(",")) + "] for Template [" + settingsId + "]");
 
         var update = CaaSTemplateUpdate
             .builder()
             .settingsId(settingsId)
-            .settingKeys(settingKeys)
+            .templateSettings(templateSettings)
             .updateField(CaaSTemplateUpdate.TemplateUpdateField.SETTINGS)
             .updateType(updateType)
             .build();
@@ -182,23 +183,50 @@ public class LiveUpdateServiceImpl implements LiveUpdateService {
 
     @Override
     public void registerWebsocketSession(WebSocketSession session) {
+//        RedisWebSocketSession redisWebSocketSession = new RedisWebSocketSession((StandardWebSocketSession) session);
+//
+//        try (Jedis jedis = jedisPool.getResource()) {
+//            jedis.sadd(SOCKET_LIST.getBytes(), jdkSerializer.serialize(redisWebSocketSession));
+//        }
 
+        this.sessionList.add(session);
     }
 
     @Override
     public void removeWebsocketSession(WebSocketSession session) {
-
+//        RedisWebSocketSession redisWebSocketSession = new RedisWebSocketSession((StandardWebSocketSession) session);
+//
+//        try (Jedis jedis = jedisPool.getResource()) {
+//            jedis.srem(SOCKET_LIST.getBytes(), jdkSerializer.serialize(redisWebSocketSession));
+//        }
+        this.sessionList.remove(session);
     }
 
     @Override
     public List<WebSocketSession> getWebsocketSessions() {
-        return null;
+//        try (Jedis jedis = jedisPool.getResource()) {
+//            try{
+//                return jedis.smembers(SOCKET_LIST.getBytes())
+//                    .stream()
+//                    .map(byteSession ->
+//                    {
+//                        StandardWebSocketSession webSocketSession  = ((RedisWebSocketSession) jdkSerializer.deserialize(byteSession)).getWebSocketSession();
+//                        return  webSocketSession;
+//                    })
+//                    .collect(Collectors.toList());
+//            }catch(Exception e){
+//                logger.error("Error while extracting Websocket Sessions from redis: " + e.getMessage());
+//                e.printStackTrace();
+//            }
+//        }
+        return this.sessionList.stream().collect(Collectors.toList());
     }
 
     private void publishUpdate(CaaSTemplateUpdate update) {
         try (Jedis jedis = jedisPool.getResource()) {
             String updateString = gson.toJson(update);
-            var channel = UPDATE_TOPIC + "." + update.getUpdateField().toString() + "." + update.getUpdateType().toString();
+            //var channel = UPDATE_TOPIC + "." + update.getUpdateField().toString() + "." + update.getUpdateType().toString();
+            var channel = UPDATE_TOPIC;
             jedis.publish(channel, updateString);
         }
     }

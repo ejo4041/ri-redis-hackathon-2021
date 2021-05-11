@@ -107,7 +107,7 @@ public class RedisServiceImpl implements RedisService {
             throw new MustNotExistException(settingsId, path, e);
         }
 
-        liveUpdateService.publishSettingsUpdate(settingsId,List.of(settingsKey), CaaSTemplateUpdate.TemplateUpdateType.CREATE);
+        liveUpdateService.publishSettingsUpdate(settingsId,Map.of(settingsKey,settingsValue), CaaSTemplateUpdate.TemplateUpdateType.CREATE);
         logger.info("Redis template setting '" + settingsKey + "' added");
     }
 
@@ -122,7 +122,7 @@ public class RedisServiceImpl implements RedisService {
             throw new MustExistException(settingsId, path, e);
         }
 
-        liveUpdateService.publishSettingsUpdate(settingsId,List.of(settingsKey), CaaSTemplateUpdate.TemplateUpdateType.UPDATE);
+        liveUpdateService.publishSettingsUpdate(settingsId,Map.of(settingsKey,settingsValue), CaaSTemplateUpdate.TemplateUpdateType.UPDATE);
         logger.info("Redis template setting '" + settingsKey + "' updated");
     }
 
@@ -132,7 +132,7 @@ public class RedisServiceImpl implements RedisService {
 
         redisClient.del(settingsId, new Path(".templateSettings." + settingsKey));
 
-        liveUpdateService.publishSettingsUpdate(settingsId,List.of(settingsKey), CaaSTemplateUpdate.TemplateUpdateType.DELETE);
+        liveUpdateService.publishSettingsUpdate(settingsId,Map.of(settingsKey,null), CaaSTemplateUpdate.TemplateUpdateType.DELETE);
         logger.info("Redis template setting '" + settingsKey + "' deleted");
     }
 

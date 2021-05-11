@@ -30,7 +30,7 @@ public class WebsocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
-        webSocketHandlerRegistry.addHandler(new JsonWebsocketHandler(updateService), "/updates")
+        webSocketHandlerRegistry.addHandler(new JsonWebsocketHandler(updateService), "/api/v1/updates")
             .addInterceptors(updateInterceptor());
 
     }
