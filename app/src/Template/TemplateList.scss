@@ -1,0 +1,9 @@
+.template-list-item {
+    cursor: pointer;
+    &:hover {
+        background: #EEE;
+    }
+    &.active {
+        background: #DDD;
+    }
+}

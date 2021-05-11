@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import Dashboard from './Dashboard/Dashboard';
 import Login from './Auth/Login';
-import TemplateList from './Template/TemplateList';
+import Template from './Template/Template';
 
 const routes = [
   {
@@ -18,7 +18,7 @@ const routes = [
   },
   {
     path: "/template",
-    main: TemplateList
+    main: Template
   },
   {
     path: "/user",

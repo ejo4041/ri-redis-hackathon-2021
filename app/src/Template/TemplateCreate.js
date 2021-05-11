@@ -1,4 +1,4 @@
-import './TemplateCreate.scss';
+import './TemplateCreate.scss'
 
 
 export default function TemplateCreate() {

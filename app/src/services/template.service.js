@@ -1,34 +1,36 @@
 import axios from 'axios'
 
-let URL = 'http://localhost:8082/api/v1/admin/template'
+let URL = 'http://localhost:8081/api/v1/admin/template'
 
 class Template {
+    axiosInstance = axios.create({
+        baseURL: URL,
+        headers: { 'Content-type': 'application/json' },
+      });
+
     addTemplate(data) {
-        axios.post(`${URL}/create`, data)
+        return this.axiosInstance.post(`/create`, data)
     }
     addTemplateSetting(data, id) {
-        axios.post(`${URL}/create/${id}/templateSetting`, data)
+        return this.axiosInstance.post(`/create/${id}/templateSetting`, data)
     }
     deleteTemplate(id) {
-        axios.delete(`${URL}/delete/${id}`)
+        return this.axiosInstance.delete(`/delete/${id}`)
     }
     deleteTemplateSetting(id, key) {
-        axios.post(`${URL}/delete/${id}/templateSetting/${key}`)
+        return this.axiosInstance.post(`/delete/${id}/templateSetting/${key}`)
     }
     getTemplates() {
-        return axios.get(`${URL}/get`, {
-            headers: {
-            'Content-Type': 'application/json'
-        }})
+        return this.axiosInstance.get(`/get`)
     }
     updateTemplate(data) {
-        axios.put(`${URL}/update`, data)
+        return this.axiosInstance.put(`/update`, data)
     }
     updateTemplateName(id, tplName) {
-        axios.put(`${URL}/create/${id}/templateName/${tplName}`)
+        return this.axiosInstance.put(`/create/${id}/templateName/${tplName}`)
     }
     updateTemplateSetting(data, id) {
-        axios.put(`${URL}/create/${id}/templateSetting`, data)
+        return this.axiosInstance.put(`/create/${id}/templateSetting`, data)
     }
 }
 
