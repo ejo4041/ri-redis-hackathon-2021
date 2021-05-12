@@ -55,9 +55,9 @@ Postman scripts are in the postman directory.
 Swagger UI:
 http://localhost:8081/swagger-ui.html
 
-```shell
 POST http://localhost:8081/api/v1/admin/template/create
 
+```
 {
     "settingsId": "James",
     "templateName": "Test",
