@@ -238,6 +238,10 @@ dependencies {
     implementation "io.lettuce:lettuce-core:6.1.1.RELEASE"
     implementation "com.google.code.gson:gson:2.8.5"
     implementation group: 'com.redislabs', name: 'jrejson', version: '1.4.0-SNAPSHOT'
+    
+    // Jedis
+    implementation "redis.clients:jedis:3.7.0-SNAPSHOT"
+
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
     annotationProcessor "org.projectlombok:lombok:1.18.10"

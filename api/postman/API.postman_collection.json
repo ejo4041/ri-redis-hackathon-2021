@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "951901d9-e711-49e5-a1e6-bbdf42a88dc0",
+		"_postman_id": "bb148634-8ad3-4a9c-a2f5-413df474044f",
 		"name": "API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"settingsId\": \"James\",\n    \"templateName\": \"Test\",\n    \"templateSettings\": {\n        \"first_name\":\"fname\",\n        \"last_name\":\"lname\"\n\n    }\n}",
+					"raw": "{\n    \"adminName\": \"James\",\n    \"templateName\": \"Test\",\n    \"templateData\": [\n        {\"first_name\":\"fname\"},\n        {\"last_name\":\"lname\"}\n\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -20,12 +20,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/v1/admin/template/create",
+					"raw": "http://localhost:8081/api/v1/admin/template/create",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8082",
+					"port": "8081",
 					"path": [
 						"api",
 						"v1",
@@ -38,319 +38,12 @@
 			"response": []
 		},
 		{
-			"name": "Add Template Setting",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"settingName\": \"settingValue\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8082/api/v1/admin/template/create/:id/templateSetting",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"v1",
-						"admin",
-						"template",
-						"create",
-						":id",
-						"templateSetting"
-					],
-					"variable": [
-						{
-							"key": "id",
-							"value": "unique-template-id"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete Template",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8082/api/v1/admin/template/delete/:id",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"v1",
-						"admin",
-						"template",
-						"delete",
-						":id"
-					],
-					"variable": [
-						{
-							"key": "id",
-							"value": "unique-template-id"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete Template Data",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8082/api/v1/admin/template/delete/:id/templateSetting/:key",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"v1",
-						"admin",
-						"template",
-						"delete",
-						":id",
-						"templateSetting",
-						":key"
-					],
-					"variable": [
-						{
-							"key": "id",
-							"value": "unique-template-id"
-						},
-						{
-							"key": "key",
-							"value": "settingName"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get All Templates",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
+			"name": "Authenticate",
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "http://localhost:8082/api/v1/admin/template/get",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"v1",
-						"admin",
-						"template",
-						"get"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete Template Data Copy",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8082/api/v1/admin/template/get/:id",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"v1",
-						"admin",
-						"template",
-						"get",
-						":id"
-					],
-					"variable": [
-						{
-							"key": "id",
-							"value": "unique-template-id"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update Template",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"settingsId\": \"unique-template-id\",\n    \"templateName\": \"New Template Name\",\n    \"templateSettings\": {\n        \"newSetting1\":\"newValue1\",\n        \"newSetting2\":\"newValue2\"\n\n    }\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8082/api/v1/admin/template/update",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"v1",
-						"admin",
-						"template",
-						"update"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update Template Name",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"settingsId\": \"unique-template-id\",\n    \"templateName\": \"New Template Name\",\n    \"templateSettings\": {\n        \"newSetting1\":\"newValue1\",\n        \"newSetting2\":\"newValue2\"\n\n    }\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8082/api/v1/admin/template/update/:id/templateName/:name",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"v1",
-						"admin",
-						"template",
-						"update",
-						":id",
-						"templateName",
-						":name"
-					],
-					"variable": [
-						{
-							"key": "id",
-							"value": "unique-template-id"
-						},
-						{
-							"key": "name",
-							"value": "Updated Template Name"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update Template Data",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"settingName\": \"updatedSettingValue\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8082/api/v1/admin/template/update/:id/templateSetting",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"v1",
-						"admin",
-						"template",
-						"update",
-						":id",
-						"templateSetting"
-					],
-					"variable": [
-						{
-							"key": "id",
-							"value": "unique-template-id"
-						}
-					]
+					"raw": ""
 				}
 			},
 			"response": []
