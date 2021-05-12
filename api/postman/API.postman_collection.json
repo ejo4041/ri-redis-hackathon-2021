@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5f9d5cc2-e877-4789-8085-22569efc5b63",
+		"_postman_id": "9e2af218-9822-46e1-a0b9-9e03f314379d",
 		"name": "API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -197,7 +197,7 @@
 			"response": []
 		},
 		{
-			"name": "Delete Template Data Copy",
+			"name": "Get Template",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -232,6 +232,54 @@
 						{
 							"key": "id",
 							"value": "unique-template-id"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Template Setting",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/v1/admin/template/get/:id/templateSetting/:settingKey",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"v1",
+						"admin",
+						"template",
+						"get",
+						":id",
+						"templateSetting",
+						":settingKey"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "unique-template-id"
+						},
+						{
+							"key": "settingKey",
+							"value": "template-setting-key"
 						}
 					]
 				}
