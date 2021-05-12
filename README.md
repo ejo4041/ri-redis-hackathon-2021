@@ -55,9 +55,9 @@ Postman scripts are in the postman directory.
 Swagger UI:
 http://localhost:8081/swagger-ui.html
 
-```shell
 POST http://localhost:8081/api/v1/admin/template/create
 
+```
 {
     "settingsId": "James",
     "templateName": "Test",
@@ -67,12 +67,33 @@ POST http://localhost:8081/api/v1/admin/template/create
     }
 }
 ```
+##### Authentication
+
+POST http://localhost:8081/api/v1/users/auth
+
+```
+{
+     "username": "hackerboi",
+     "password": "zer0daylulz"
+}
+```
+Response:
+
+```
+{
+    "username": "hackerboi",
+    "password": "zer0daylulz",
+    "authenticated": true,
+    "jwt": "35434534kjdfzgkjdfg"
+}
+```
+
 
 #### API Security
 
 To enable security on /api/v1/admin API endpoints, uncomment the following line in the SecurityConfiguration.java file:
 
-```//.antMatchers("/api/v1/admin/**").authenticated()
+```//.antMatchers("/api/v1/admin/**").authenticated()```
 
 API requests will then require a Bearer Token header with a valid JWT Token as a value.
 

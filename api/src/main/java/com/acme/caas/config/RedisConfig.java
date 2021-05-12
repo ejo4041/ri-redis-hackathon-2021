@@ -4,6 +4,7 @@ import com.redislabs.modules.rejson.JReJSON;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import redis.clients.jedis.Jedis;
@@ -36,9 +37,20 @@ public class RedisConfig {
      * @return a JedisPool Object
      */
     @Bean
-    public JedisPool jedisPool(@Value("${spring.redis.host}") String host, @Value("${spring.redis.port}") Integer port) {
+    public JedisPool jedisPool(@Value("${spring.redis.host}") String host, @Value("${spring.redis.port}") Integer port, Environment env) {
+        String redisHost = env.getProperty("spring.redis.host");
+        Integer redisPort = Integer.parseInt(env.getProperty("spring.redis.port"));
+
         JedisPoolConfig config = new JedisPoolConfig();
-        var pool = new JedisPool(config, host, port);
+        // config.setMaxTotal(1);
+        // config.setTestOnBorrow(true);
+        // config.setTestOnReturn(true);
+
+        // Fixes redis.clients.jedis.exceptions.JedisConnectionException: Unexpected end of stream.
+        config.setMaxIdle(0);
+
+        var pool = new JedisPool(config, redisHost, redisPort);
+
         return pool;
     }
 

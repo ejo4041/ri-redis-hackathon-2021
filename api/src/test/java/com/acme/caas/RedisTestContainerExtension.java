@@ -14,12 +14,14 @@ public class RedisTestContainerExtension implements BeforeAllCallback, AfterAllC
 
     @Override
     public void beforeAll(ExtensionContext extensionContext) throws Exception {
-        if (!started.get()) {
-            redis.start();
-            System.setProperty("test.redis.server.port", redis.getMappedPort(6379).toString());
-            System.setProperty("jhipster.cache.redis.server", "redis://" + redis.getContainerIpAddress() + ":" + redis.getMappedPort(6379));
-            started.set(true);
-        }
+        // Commenting-out the if statement fixes the unit test on my Ubuntu machine.  Without the following
+        // if statement commented-out, the tests only succeed exactly 50% of the time. (JWC)
+        //if (!started.get()) {
+        redis.start();
+        System.setProperty("test.redis.server.port", redis.getMappedPort(6379).toString());
+        System.setProperty("jhipster.cache.redis.server", "redis://" + redis.getContainerIpAddress() + ":" + redis.getMappedPort(6379));
+        started.set(true);
+        //}
     }
 
     @Override
