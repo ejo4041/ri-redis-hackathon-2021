@@ -86,7 +86,7 @@ public class AdminController {
         return response;
     }
 
-    @GetMapping(path = "/template/get", consumes = "application/json", produces = "application/json")
+    @GetMapping(path = "/template/get", produces = "application/json")
     public AdminTemplatesResponse getTemplates() throws Exception {
         logger.info("/template/get");
 
@@ -98,7 +98,7 @@ public class AdminController {
         return response;
     }
 
-    @GetMapping(path = "/template/get/{id}", consumes = "application/json", produces = "application/json")
+    @GetMapping(path = "/template/get/{id}", produces = "application/json")
     public AdminTemplateResponse getTemplate(@PathVariable("id") String settingsId) throws Exception {
         logger.info("/template/get/" + settingsId);
 
