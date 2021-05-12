@@ -71,7 +71,8 @@ POST http://localhost:8081/api/v1/admin/template/create
 
 POST http://localhost:8081/api/v1/users/auth
 
-```{
+```
+{
      "username": "hackerboi",
      "password": "zer0daylulz"
 }
