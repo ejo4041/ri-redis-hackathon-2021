@@ -107,3 +107,5 @@ keycloak.server.url.verifyToken: http://localhost:8080/auth/realms/CaaS/protocol
 # Redis key settings
 caas.redis.key_prefix: 'caas_dev_'
 caas.redis.key_object: 'caas_keys_dev'
+caas.redis.socket_list: 'caas_socket_dev'
+caas.redis.update_topic: 'caasUpdates_dev'

@@ -13,6 +13,8 @@ import com.redislabs.modules.rejson.JReJSON;
 import com.redislabs.modules.rejson.Path;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import org.redisson.misc.Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,7 +134,10 @@ public class RedisServiceImpl implements RedisService {
 
         redisClient.del(settingsId, new Path(".templateSettings." + settingsKey));
 
-        liveUpdateService.publishSettingsUpdate(settingsId,Map.of(settingsKey,null), CaaSTemplateUpdate.TemplateUpdateType.DELETE);
+        HashMap deleteMap = new HashMap();
+        deleteMap.put(settingsKey,null);
+
+        liveUpdateService.publishSettingsUpdate(settingsId,deleteMap, CaaSTemplateUpdate.TemplateUpdateType.DELETE);
         logger.info("Redis template setting '" + settingsKey + "' deleted");
     }
 
