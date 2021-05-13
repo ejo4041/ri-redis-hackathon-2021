@@ -108,3 +108,68 @@ cd app
 npm install
 npm start
 ```
+#### Run Nginx Proxy
+In the /app dir, there is a Dockerfile and docker-compose.yml. 
+
+Open the docker-compose.yml and point to this directory in the volume mount.
+
+You can auto build/start this by running.
+```
+cd /app
+sh local_run.sh
+```
+TODO: I was getting CORS errs when POSTing to the API, so I was trying to run the Docker to proxy the API while still running the local react app on port :3000, but I was still getting a CORS err.
+
+#### Websocket Updates
+
+You can now use websocket to subscribe to Template updates and receive updates 
+as they occur in real-time. On update, a JSON string object is sent to subscribers 
+in the *CaaSTemplateUpdate* class format:
+```json
+CaaSTemplateUpdate
+{
+   "settingsId": "caas_dev_c779f6be_e58b_4b23_b085_037c8c47f5d2",
+   "name": "new template name",
+   //what was the name updated to
+   "templateSettings": {
+      //object with key-values for which settings updated
+      "setting1": "newSettingValue",
+      "setting9": "anotherNewValue"
+   },
+   "updateType": TemplateUpdateType,
+   "updateField": TemplateUpdateField
+}
+TemplateUpdateType Enum{
+   NAME,
+   SETTINGS,
+   OBJECT
+}
+TemplateUpdateField Enum{
+   CREATE,
+   UPDATE,
+   DELETE
+}
+```
+
+The websocket endpoint sits at: **/api/v1/updates**
+
+Query Parameters are used in the connection string to configure the update listener.
+Some are required and some are optional.
+
+| Query Param | required? | Description | Accepted Values |
+|---|---|---|---|
+| **settingsId** | **yes** | a single template settingsId to track (maybe multiple in the future)  | a single settingsId string |
+| **templateUpdateField** | no | The fields to listen for for updates. Comma-seperated for multiple. Empty listens for all changes | NAME, SETTINGS, OBJECT  |
+| **templateUpdateType** | no | What type of updates to listen for, such as create, update, and or delete. Comma-seperated for multiple.  Empty listens for all changes | CREATE, UPDATE, DELETE  |
+
+
+**Example Websocket Connection**
+
+| Query Param | Value |
+|---|---|
+| **settingsId** | caas_dev_c779f6be_e58b_4b23_b085_037c8c47f5d2 |
+| **templateUpdateField** | NAME,SETTINGS | 
+| **templateUpdateType** | CREATE,UPDATE | 
+```shell
+ws://localhost:8081/api/v1/updates?templateUpdateType=CREATE%2CUPDATE&templateUpdateField=NAME%2CSETTINGS&settingsId=caas_dev_c779f6be_e58b_4b23_b085_037c8c47f5d2
+```
