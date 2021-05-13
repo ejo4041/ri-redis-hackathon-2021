@@ -1,6 +1,8 @@
 package com.acme.caas.domain;
 
 import java.util.List;
+import java.util.Map;
+
 import lombok.*;
 
 /**
@@ -20,7 +22,7 @@ public class CaaSTemplateUpdate {
 
     private String name; //what was the name updated to
 
-    private List<String> settingKeys; //the setting key/s that were updated
+    private Map<String, Object> templateSettings; //the setting key/s that were updated
 
     private TemplateUpdateType updateType; // Create, update, or delete
 

@@ -1,5 +1,6 @@
 package com.acme.caas.domain.responses;
 
+import com.acme.caas.domain.CaaSTemplate;
 import java.util.List;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -7,9 +8,9 @@ import lombok.experimental.SuperBuilder;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public class AdminControllerResponse {
+public class TemplatesResponse extends ControllerResponse {
 
-    private String message;
+    private List<CaaSTemplate> templateList;
 }
