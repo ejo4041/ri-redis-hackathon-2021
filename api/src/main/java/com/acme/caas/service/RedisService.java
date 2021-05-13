@@ -1,6 +1,8 @@
 package com.acme.caas.service;
 
 import com.acme.caas.domain.CaaSTemplate;
+import org.springframework.web.socket.WebSocketSession;
+
 import java.util.List;
 import java.util.Map;
 

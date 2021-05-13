@@ -1,9 +1,11 @@
 package com.acme.caas.service.impl;
 
 import com.acme.caas.domain.CaaSTemplate;
+import com.acme.caas.domain.CaaSTemplateUpdate;
 import com.acme.caas.domain.errors.MustExistException;
 import com.acme.caas.domain.errors.MustNotExistException;
 import com.acme.caas.service.CaasKeyService;
+import com.acme.caas.service.LiveUpdateService;
 import com.acme.caas.service.RedisService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -11,11 +13,18 @@ import com.redislabs.modules.rejson.JReJSON;
 import com.redislabs.modules.rejson.Path;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import org.redisson.misc.Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.WebSocketSession;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 @Service
 public class RedisServiceImpl implements RedisService {
@@ -29,7 +38,13 @@ public class RedisServiceImpl implements RedisService {
     private JReJSON redisClient;
 
     @Autowired
+    private JedisPool jedisPool;
+
+    @Autowired
     private CaasKeyService keyService;
+
+    @Autowired
+    private LiveUpdateService liveUpdateService;
 
     @Override
     public CaaSTemplate createTemplate(CaaSTemplate caasTemplate) throws Exception {
@@ -56,6 +71,7 @@ public class RedisServiceImpl implements RedisService {
         }
 
         logger.info("Redis template created");
+        liveUpdateService.publishFullUpdate(template.getSettingsId(), CaaSTemplateUpdate.TemplateUpdateType.CREATE);
 
         return template;
     }
@@ -79,6 +95,7 @@ public class RedisServiceImpl implements RedisService {
         }
 
         logger.info("Redis template updated");
+        liveUpdateService.publishFullUpdate(caasTemplate.getSettingsId(), CaaSTemplateUpdate.TemplateUpdateType.UPDATE);
     }
 
     @Override
@@ -92,6 +109,7 @@ public class RedisServiceImpl implements RedisService {
             throw new MustNotExistException(settingsId, path, e);
         }
 
+        liveUpdateService.publishSettingsUpdate(settingsId,Map.of(settingsKey,settingsValue), CaaSTemplateUpdate.TemplateUpdateType.CREATE);
         logger.info("Redis template setting '" + settingsKey + "' added");
     }
 
@@ -106,6 +124,7 @@ public class RedisServiceImpl implements RedisService {
             throw new MustExistException(settingsId, path, e);
         }
 
+        liveUpdateService.publishSettingsUpdate(settingsId,Map.of(settingsKey,settingsValue), CaaSTemplateUpdate.TemplateUpdateType.UPDATE);
         logger.info("Redis template setting '" + settingsKey + "' updated");
     }
 
@@ -115,6 +134,10 @@ public class RedisServiceImpl implements RedisService {
 
         redisClient.del(settingsId, new Path(".templateSettings." + settingsKey));
 
+        HashMap deleteMap = new HashMap();
+        deleteMap.put(settingsKey,null);
+
+        liveUpdateService.publishSettingsUpdate(settingsId,deleteMap, CaaSTemplateUpdate.TemplateUpdateType.DELETE);
         logger.info("Redis template setting '" + settingsKey + "' deleted");
     }
 
@@ -124,6 +147,7 @@ public class RedisServiceImpl implements RedisService {
 
         redisClient.set(settingsId, name, new Path(".templateName"));
 
+        liveUpdateService.publishNameUpdate(settingsId, name, CaaSTemplateUpdate.TemplateUpdateType.UPDATE);
         logger.info("Redis template name updated");
     }
 
@@ -203,6 +227,7 @@ public class RedisServiceImpl implements RedisService {
         redisClient.del(settingsId);
         keyService.deleteKey(settingsId);
 
+        liveUpdateService.publishFullUpdate(settingsId, CaaSTemplateUpdate.TemplateUpdateType.DELETE);
         logger.info("Redis template with id '" + settingsId + "' was deleted");
     }
 
