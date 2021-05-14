@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-let URL = 'http://localhost/api/v1/admin/template'
+let URL = 'http://localhost:8081/api/v1/admin/template'
 
 class Template {
     axiosInstance = axios.create({
