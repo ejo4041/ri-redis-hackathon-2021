@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/auth/realms/CaaS/protocol/openid-connect/";
+const API_URL = "http://localhost:8081/api/v1/users/auth";
 
 class AuthService {
   login(username, password) {

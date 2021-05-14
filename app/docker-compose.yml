@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  caas-ui:
+    image: "caas:latest"
+    volumes:
+      - "C:/Users/Brian/projects/repos/ri-hackathon/app/nginx.conf:/etc/nginx/nginx.conf"
+    ports:
+      - 80:80
