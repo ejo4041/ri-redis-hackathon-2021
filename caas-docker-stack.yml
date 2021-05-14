@@ -1,0 +1,40 @@
+version: '3.5'
+
+services:
+
+    caas-ui:
+        image: caas-ui:latest
+        ports:
+            - 80:80
+
+    caas-api:
+        image: caas-api:latest
+        ports:
+          - 8081:8081
+        volumes:
+          - ./api/src/main/resources/config:/app/conf
+        environment:
+          - SPRING_PROFILES_ACTIVE=dev
+          - SPRING_CONFIG_LOCATION=/app/conf/
+        
+    redismod:
+        image: redislabs/redismod
+        env_file: $PWD/redis/redis.env
+        volumes:
+            - $PWD/redis/data:/data
+            - $PWD/redis/redis.conf:/usr/local/etc/redis/redis.conf
+        command: ["/usr/local/etc/redis/redis.conf"] # load modules, set /data directory, point at python
+        ports:
+            - 6379:6379
+
+    keycloak:
+        image: jboss/keycloak:12.0.4
+        ports: 
+            - 8080:8080      
+        environment: 
+            - KEYCLOAK_USER=${kcadmin}
+            - KEYCLOAK_PASSWORD=${kcadmin_password}
+            - DB_VENDOR=h2
+        volumes:
+            - $PWD/keycloak/kcdb:/opt/jboss/keycloak/standalone/data
+        restart: always

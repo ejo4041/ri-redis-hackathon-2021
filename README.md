@@ -194,3 +194,14 @@ Some are required and some are optional.
 ```shell
 ws://localhost:8081/api/v1/updates?templateUpdateType=CREATE%2CUPDATE&templateUpdateField=NAME%2CSETTINGS&settingsId=caas_dev_c779f6be_e58b_4b23_b085_037c8c47f5d2
 ```
+
+### Run Whole Docker Stack
+
+1.  Build the UI docker image
+     1.  See steps above to ensure the code successfully built
+     1.  docker build -t caas-ui:latest .
+1.  Build the API docker image
+     1.  Ensure the java project is successfully built
+     1.  docker build -t caas-api:latest .
+1.  Run docker-compose to bring up the stack
+     1.  docker-compose -f caas-docker-stack.yml up -d

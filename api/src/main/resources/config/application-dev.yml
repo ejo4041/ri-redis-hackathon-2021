@@ -57,14 +57,14 @@ jhipster:
   cache: # Cache configuration
     redis: # Redis configuration
       expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
-      server: redis://localhost:6379
+      server: redis://redismod:6379
       cluster: false
       # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
       # cluster: true
   # CORS is disabled by default on microservices, as you should access them through a gateway.
   # If you want to enable it, please uncomment the configuration below.
   cors:
-    allowed-origins: 'http://localhost:3000'
+    allowed-origins: 'http://localhost'
     allowed-methods: '*'
     allowed-headers: '*'
     exposed-headers: 'Authorization,Link,X-Total-Count'
@@ -96,13 +96,13 @@ jhipster:
 # ===================================================================
 
 # application:
-spring.redis.host: localhost
+spring.redis.host: redismod
 spring.redis.port: 6379
 spring.autoconfigure.exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
 
 # keycloak
-keycloak.server.url.auth: http://localhost:8080/auth/realms/CaaS/protocol/openid-connect/token
-keycloak.server.url.verifyToken: http://localhost:8080/auth/realms/CaaS/protocol/openid-connect/userinfo
+keycloak.server.url.auth: http://keycloak:8080/auth/realms/CaaS/protocol/openid-connect/token
+keycloak.server.url.verifyToken: http://keycloak:8080/auth/realms/CaaS/protocol/openid-connect/userinfo
 keycloak.client.id: caas
 
 # Redis key settings
