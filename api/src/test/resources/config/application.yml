@@ -85,3 +85,4 @@ spring.autoconfigure.exclude: org.springframework.boot.autoconfigure.security.se
 # keycloak
 keycloak.server.url.auth: http://localhost:8080/auth/realms/CaaS/protocol/openid-connect/token
 keycloak.server.url.verifyToken: http://localhost:8080/auth/realms/CaaS/protocol/openid-connect/userinfo
+keycloak.client.id: caas
