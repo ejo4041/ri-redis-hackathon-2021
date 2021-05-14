@@ -1,5 +1,7 @@
 import './sidebar.scss';
 import { SettingsOutlined, ToggleOnOutlined } from '@material-ui/icons';
+import LibraryAddOutlinedIcon from '@material-ui/icons/LibraryAddOutlined';
+import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import Icon from '@material-ui/core/Icon';
 import { Link } from 'react-router-dom';
 import { Tooltip } from '@material-ui/core';
@@ -15,10 +17,15 @@ export default function Sidebar() {
       </Tooltip>
       <Tooltip title="Templates" placement="right">
         <Link to="/template" className="SidebarIcon">
-            <ToggleOnOutlined />
+            <LibraryAddOutlinedIcon />
         </Link>
       </Tooltip>
-      <Tooltip title="Users" placement="right">
+      <Tooltip title="Logout" placement="right">
+        <Link to="/logout" className="SidebarIcon">
+            <ExitToAppOutlinedIcon />
+        </Link>
+      </Tooltip>
+      {/* <Tooltip title="Users" placement="right">
         <Link to="/user" className="SidebarIcon">
             <Icon>manage_accounts</Icon>
         </Link>
@@ -27,7 +34,7 @@ export default function Sidebar() {
         <Link to="/admin" className="SidebarIcon">
             <Icon>admin_panel_settings</Icon>
         </Link>
-      </Tooltip>
+      </Tooltip> */}
     </div>
   );
 }

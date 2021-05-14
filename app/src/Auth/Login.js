@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,22 +13,12 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import AuthService from '../services/auth.service';
+import { setToken } from '../Utils/Common';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    //marginTop: theme.spacing(0),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -46,8 +36,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login() {
+const useFormInput = initialValue => {
+  const [value, setValue] = useState(initialValue);
+ 
+  const handleChange = e => {
+    setValue(e.target.value);
+  }
+  return {
+    value,
+    onChange: handleChange
+  }
+}
+
+export default function Login(props) {
+  console.log("Login");
   const classes = useStyles();
+
+  const [loading, setLoading] = useState(false);
+  const username = useFormInput('');
+  const password = useFormInput('');
+  const [error, setError] = useState(null);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+    console.log("Username: " + username.value);
+    console.log("Password: " + password.value);
+    AuthService.login(username.value, password.value).then((data) => {
+      console.log("Auth Response: " + JSON.stringify(data));
+      setToken(data);
+      props.history.push('/');
+    }).catch(error => {
+      setLoading(false);
+      if (error.response.status === 401) {
+        setError("Authentication Failed.  Please Try Again.");
+      } else setError("An unexpected error occurred.  Please try again.");
+    });
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -59,7 +85,7 @@ export default function Login() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleLogin.bind(this)}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -69,6 +95,7 @@ export default function Login() {
             label="Email Address"
             name="email"
             autoComplete="email"
+            {...username}
             autoFocus
           />
           <TextField
@@ -81,10 +108,7 @@ export default function Login() {
             type="password"
             id="password"
             autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+            {...password}
           />
           <Button
             type="submit"
@@ -92,26 +116,13 @@ export default function Login() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleLogin}
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
+          {error && <><span style={{ color: 'red' }}>{error}</span><br /></>}<br />
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
     </Container>
   );
 }

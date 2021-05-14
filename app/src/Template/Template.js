@@ -4,6 +4,7 @@ import TemplateEdit from './TemplateEdit';
 import TemplateList from './TemplateList'
 
 export default function Template() {
+    console.log("Template");
     const [template, setTemplate] = useState(null)
     const templateChangeHandler = (tmpl) => {
         setTemplate(tmpl);
