@@ -129,6 +129,17 @@ cd app
 npm install
 npm start
 ```
+#### Run Nginx Proxy
+In the /app dir, there is a Dockerfile and docker-compose.yml. 
+
+Open the docker-compose.yml and point to this directory in the volume mount.
+
+You can auto build/start this by running.
+```
+cd /app
+sh local_run.sh
+```
+TODO: I was getting CORS errs when POSTing to the API, so I was trying to run the Docker to proxy the API while still running the local react app on port :3000, but I was still getting a CORS err.
 
 #### Websocket Updates
 
