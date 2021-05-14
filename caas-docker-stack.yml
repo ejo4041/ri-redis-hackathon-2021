@@ -12,7 +12,7 @@ services:
         ports:
           - 8081:8081
         volumes:
-          - /home/jc/PersonalProjects/ri-redis-hackathon-2021/api/src/main/resources/config:/app/conf
+          - ./api/src/main/resources/config:/app/conf
         environment:
           - SPRING_PROFILES_ACTIVE=dev
           - SPRING_CONFIG_LOCATION=/app/conf/
