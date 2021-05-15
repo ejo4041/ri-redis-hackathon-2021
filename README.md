@@ -169,7 +169,6 @@ You can auto build/start this by running.
 cd /app
 sh local_run.sh
 ```
-TODO: I was getting CORS errs when POSTing to the API, so I was trying to run the Docker to proxy the API while still running the local react app on port :3000, but I was still getting a CORS err.
 
 #### Websocket Updates
 
@@ -225,7 +224,7 @@ Some are required and some are optional.
 ws://localhost:8081/api/v1/updates?templateUpdateType=CREATE%2CUPDATE&templateUpdateField=NAME%2CSETTINGS&settingsId=caas_dev_c779f6be_e58b_4b23_b085_037c8c47f5d2
 ```
 
-### Run Whole Docker Stack
+### Running Whole Docker Stack
 
 1.  Build the UI docker image
      1.  See steps above to ensure the code successfully built
