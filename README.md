@@ -3,7 +3,7 @@ ri-redis-hackathon-2021
 
 ## Project Name
 
-System Configuration-as-a-Service (CaaS)
+Configuration-as-a-Service (CaaS)
 
 ### Project Description
 
@@ -15,11 +15,11 @@ Finally, the CaaS API provides real-time template updates over a websocket so co
 
 ### CaaS Architecture
 
-[CaaS Architecture](docs/architecture.png)
+[CaaS Architecture Diagram](docs/architecture.png)
 
 ### CaaS UI
 
-[CaaS UI](docs/caas-template-ui.png)
+[CaaS UI Screenshot](docs/caas-template-ui.png)
 
 ### Current Team
 - James Caple
