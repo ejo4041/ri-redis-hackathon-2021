@@ -1,7 +1,6 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@material-ui/core'
-import { Delete, DeleteForever } from '@material-ui/icons'
+import { Box, Button, Tooltip } from '@material-ui/core'
+import { DeleteForever } from '@material-ui/icons'
 import { useState } from 'react';
-import templateService from '../services/template.service'
 import SharedDialog from '../SharedComponents/SharedDialog';
 
 export default function TemplateListItem(props) {

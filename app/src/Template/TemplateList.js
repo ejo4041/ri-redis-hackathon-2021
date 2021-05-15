@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import templateService from '../services/template.service'
 import TemplateListItem from './TemplateListItem'
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, withStyles } from '@material-ui/core';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import TemplateCreate from './TemplateCreate';
 
 export default function TemplateList(props) {

@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from '@material-ui/core';
+import { useEffect, useRef, useState } from 'react'
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from '@material-ui/core';
 import templateService from '../services/template.service';
 import { DeleteForever } from '@material-ui/icons';
 import SharedDialog from '../SharedComponents/SharedDialog';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 export default function TemplateEdit(props) {
     const [settings, setSettings] = useState();
@@ -11,6 +12,35 @@ export default function TemplateEdit(props) {
     const [newSettingKey, setNewSettingKey] = useState();
     const [deleteSettingKey, setDeleteSettingKey] = useState();
     const [settingsSavedMessage, setSettingsSavedMessage] = useState("");
+    const messageHistory = useRef([]);
+
+
+
+    const socketUrl = `ws://localhost:8081/api/v1/updates?settingsId=${props.template.settingsId}`;
+
+    const {
+      sendMessage,
+      sendJsonMessage,
+      lastMessage,
+      lastJsonMessage,
+      readyState,
+      getWebSocket
+    } = useWebSocket(socketUrl, {
+      onOpen: () => console.log('opened'),
+      //Will attempt to reconnect on all close events, such as server shutting down
+      shouldReconnect: (closeEvent) => true,
+    });
+
+
+
+
+
+
+
+
+
+
+
 
     const handleClickOpen = (key) => {
         setDeleteSettingKey(key);

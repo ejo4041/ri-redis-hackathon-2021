@@ -1,8 +1,7 @@
 import './sidebar.scss';
-import { SettingsOutlined, ToggleOnOutlined } from '@material-ui/icons';
+import { SettingsOutlined } from '@material-ui/icons';
 import LibraryAddOutlinedIcon from '@material-ui/icons/LibraryAddOutlined';
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
-import Icon from '@material-ui/core/Icon';
 import { Link } from 'react-router-dom';
 import { Tooltip } from '@material-ui/core';
 
