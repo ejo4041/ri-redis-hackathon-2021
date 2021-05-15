@@ -1,43 +1,41 @@
 import { useEffect, useState } from 'react'
-import './TemplateList.scss'
 import templateService from '../services/template.service'
 import TemplateListItem from './TemplateListItem'
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@material-ui/core';
-
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, withStyles } from '@material-ui/core';
+import TemplateCreate from './TemplateCreate';
 
 export default function TemplateList(props) {
     const [templateList, setTemplateList] = useState([]);
     const [selectedTemplate, setSelectedTemplate] = useState(null)
-    const [creatingTemplate, setCreatingTemplate] = useState(false)
-    const [newTemplateName, setNewTemplateName] = useState(false)
     
     useEffect(() => {
+        getTemplates();
+    }, [setTemplateList])
+
+    const getTemplates = () => {
         templateService.getTemplates().then(res => {
             if(res && res.data.templateList) {
                 setTemplateList(res.data.templateList)
             }
         })
-        // return () => {
-        //     cleanup
-        // }
-    }, [setTemplateList])
+    }
 
-    const templateSelected = (tmpl) => {
+    const selectTemplate = (tmpl) => {
         setSelectedTemplate(tmpl)
         props.templateSelected(tmpl)
     }
-    const handleCreateTemplate = (e) => {
-        setNewTemplateName(e.target.value);
+    
+    const templateCreatedHandler = (newTpl) => {
+        setTemplateList([...templateList, newTpl])
+        selectTemplate(newTpl)
     }
-    const createTemplate = () => {
-        templateService.addTemplate({"templateName": newTemplateName}).then(res => {
-            debugger;
-            if (res && res.template) {
-                this.templateList.push(res.template);
-                this.selectedTemplate = res.template;
-            }
+
+    const deleteHandler = (id) => {
+        templateService.deleteTemplate(id).then(res => {
+            getTemplates();
         });
     }
+
     return (
         <TableContainer component={Paper} className="template-list">
             <h2>My Templates</h2>
@@ -51,24 +49,17 @@ export default function TemplateList(props) {
                 </TableHead>
                 <TableBody>
                     {templateList.map((tmpl, i) => 
-                    <TableRow key={i}>
-                        <TableCell 
+                    <TableRow key={i} hover={true}>
+                        <TableCell
+                            style={{cursor: 'pointer'}}
+                            padding="none" 
                             className={"template-list-item " + (selectedTemplate && selectedTemplate.settingsId === tmpl.settingsId ? 'active' : '')}
-                            onClick={() => templateSelected(tmpl)}>
-                            <TemplateListItem template={tmpl} />
+                            onClick={() => selectTemplate(tmpl)}>
+                                    <TemplateListItem template={tmpl} selected={selectedTemplate && selectedTemplate.settingsId === tmpl.settingsId} deleteHandler={deleteHandler} />
                         </TableCell>
                     </TableRow>
                     )}
-                    
-                    <TableRow>
-                        {!creatingTemplate && <TableCell className="template-list-item" onClick={() => setCreatingTemplate(true)}>
-                            + New Template
-                        </TableCell>}
-                        {creatingTemplate && <TableCell>
-                            <TextField placeholder="New Template" onChange={handleCreateTemplate}></TextField>
-                            <Button onClick={createTemplate}>Create</Button>
-                        </TableCell>}
-                    </TableRow>
+                    <TemplateCreate handleTemplateCreated={templateCreatedHandler}></TemplateCreate>
                 </TableBody>
             </Table>
         </TableContainer>

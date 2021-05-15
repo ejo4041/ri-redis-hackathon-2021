@@ -69,7 +69,7 @@ export default function Login(props) {
       props.history.push('/');
     }).catch(error => {
       setLoading(false);
-      if (error.response.status === 401) {
+      if (error && error.response && error.response.status === 401) {
         setError("Authentication Failed.  Please Try Again.");
       } else setError("An unexpected error occurred.  Please try again.");
     });
@@ -117,6 +117,7 @@ export default function Login(props) {
             color="primary"
             className={classes.submit}
             onClick={handleLogin}
+            disableElevation
           >
             Sign In
           </Button>
