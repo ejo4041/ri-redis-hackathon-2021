@@ -10,11 +10,11 @@ export default function Template() {
         setTemplate(tmpl);
     }
     return (
-        <Box display="flex" width={1} p={2}>
-            <Box flexGrow={1}>
+        <Box display="flex" width={1} p={1}>
+            <Box flexGrow={1} m={2}>
                 <TemplateList templateSelected={templateChangeHandler}/>
             </Box>
-            <Box flexGrow={2}>
+            <Box flexGrow={2} m={2}>
                 {template && <TemplateEdit template={template} />}
             </Box>
         </Box>

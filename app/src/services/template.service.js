@@ -18,7 +18,10 @@ class Template {
         return this.axiosInstance.delete(`/delete/${id}`)
     }
     deleteTemplateSetting(id, key) {
-        return this.axiosInstance.post(`/delete/${id}/templateSetting/${key}`)
+        return this.axiosInstance.delete(`/delete/${id}/templateSetting/${key}`)
+    }
+    getTemplate(id) {
+        return this.axiosInstance.get(`/get/${id}`)
     }
     getTemplates() {
         return this.axiosInstance.get(`/get`)

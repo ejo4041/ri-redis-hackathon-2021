@@ -2,6 +2,7 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, D
 import { Delete, DeleteForever } from '@material-ui/icons'
 import { useState } from 'react';
 import templateService from '../services/template.service'
+import SharedDialog from '../SharedComponents/SharedDialog';
 
 export default function TemplateListItem(props) {
     const [openDialog, setOpenDialog] = useState(false);
@@ -43,7 +44,17 @@ export default function TemplateListItem(props) {
                         </Tooltip>}
                 </Box>
             </Box>
-            <Dialog
+            <SharedDialog 
+                open={openDialog}
+                onClose={handleClose}
+                title={`Deleting ${props.template.templateName}`}
+                body={`Are you sure you want to delete ${props.template.templateName}, FOREVER?`}
+                onCancel={handleClose}
+                cancelText={'Cancel'}
+                onAccept={handleDelete}
+                acceptText={'Delete'}
+            />
+            {/* <Dialog
                 open={openDialog}
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
@@ -63,7 +74,7 @@ export default function TemplateListItem(props) {
                         Delete
                     </Button>
                 </DialogActions>
-            </Dialog>
+            </Dialog> */}
         </>
     )
 }
