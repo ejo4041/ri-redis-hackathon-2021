@@ -12,6 +12,8 @@ import Template from './Template/Template';
 import Logout from './Auth/Logout';
 import PrivateRoute from './Utils/PrivateRoute';
 import PublicRoute from './Utils/PublicRoute';
+import { ThemeProvider } from '@material-ui/styles';
+import { createMuiTheme } from '@material-ui/core';
 
 const routes = [
   {
@@ -37,30 +39,41 @@ const routes = [
   }
 ];
 
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#E0D040',
+    },
+    secondary: {
+      main: '#40E0D0',
+    },
+  },
+});
 
 function App() {
   return (
     <Router>
-
-      <div className="App">
-        <Sidebar />
-        <main>
-          <Switch>
-            {/* {routes.map((route, index) => (
-              <Route
-                key={index}
-                path={route.path}
-                exact={route.exact}
-                children={<route.main />}
-              />
-            ))} */}
-            <Route path="/login" component={Login} />
-            <PrivateRoute exact path="/" component={Dashboard} />
-            <PrivateRoute path="/template" component={Template} />
-            <PrivateRoute path="/logout" component={Logout} />
-          </Switch>
-        </main>
-      </div>
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          <Sidebar />
+          <main>
+            <Switch>
+              {/* {routes.map((route, index) => (
+                <Route
+                  key={index}
+                  path={route.path}
+                  exact={route.exact}
+                  children={<route.main />}
+                />
+              ))} */}
+              <Route path="/login" component={Login} />
+              <PrivateRoute exact path="/" component={Dashboard} />
+              <PrivateRoute path="/template" component={Template} />
+              <PrivateRoute path="/logout" component={Logout} />
+            </Switch>
+          </main>
+        </div>
+      </ThemeProvider>
     </Router>
   );
 }

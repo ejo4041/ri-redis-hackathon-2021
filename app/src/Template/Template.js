@@ -1,5 +1,5 @@
+import { Box } from '@material-ui/core';
 import { useState } from 'react';
-import './Template.scss'
 import TemplateEdit from './TemplateEdit';
 import TemplateList from './TemplateList'
 
@@ -10,9 +10,13 @@ export default function Template() {
         setTemplate(tmpl);
     }
     return (
-        <div className="templates">
-            <TemplateList templateSelected={templateChangeHandler}/>
-            {template && <TemplateEdit template={template} />}
-        </div>
+        <Box display="flex" width={1} p={1}>
+            <Box flexGrow={1} m={2}>
+                <TemplateList templateSelected={templateChangeHandler}/>
+            </Box>
+            <Box flexGrow={2} m={2}>
+                {template && <TemplateEdit template={template} />}
+            </Box>
+        </Box>
     )
 }
