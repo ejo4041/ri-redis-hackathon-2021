@@ -15,6 +15,20 @@ Finally, the CaaS API provides real-time template updates over a websocket so co
 
 ### CaaS Architecture
 
+The React UI is fronted by an NGINX service.  The UI talks directly to a SpringBoot microservice to perform authentication against the Keycloak service as well as to perform CRUD operations against the Redis microservice.
+
+We use JRedisJSON (https://github.com/RedisJSON/JRedisJSON) in the SpringBoot API to perform the following operations against the Redis instance:
+
+#### RedisJSON Commands
+- JSON.DEL
+- JSON.GET
+- JSON.SET
+- JSON.TYPE
+
+#### Redis Pub/Sub
+- PUBLISH
+- SUBSCRIBE
+
 [CaaS Architecture Diagram](docs/architecture.png)
 
 ### CaaS UI
