@@ -183,49 +183,23 @@ public class LiveUpdateServiceImpl implements LiveUpdateService {
 
     @Override
     public void registerWebsocketSession(WebSocketSession session) {
-//        RedisWebSocketSession redisWebSocketSession = new RedisWebSocketSession((StandardWebSocketSession) session);
-//
-//        try (Jedis jedis = jedisPool.getResource()) {
-//            jedis.sadd(SOCKET_LIST.getBytes(), jdkSerializer.serialize(redisWebSocketSession));
-//        }
 
         this.sessionList.add(session);
     }
 
     @Override
     public void removeWebsocketSession(WebSocketSession session) {
-//        RedisWebSocketSession redisWebSocketSession = new RedisWebSocketSession((StandardWebSocketSession) session);
-//
-//        try (Jedis jedis = jedisPool.getResource()) {
-//            jedis.srem(SOCKET_LIST.getBytes(), jdkSerializer.serialize(redisWebSocketSession));
-//        }
         this.sessionList.remove(session);
     }
 
     @Override
     public List<WebSocketSession> getWebsocketSessions() {
-//        try (Jedis jedis = jedisPool.getResource()) {
-//            try{
-//                return jedis.smembers(SOCKET_LIST.getBytes())
-//                    .stream()
-//                    .map(byteSession ->
-//                    {
-//                        StandardWebSocketSession webSocketSession  = ((RedisWebSocketSession) jdkSerializer.deserialize(byteSession)).getWebSocketSession();
-//                        return  webSocketSession;
-//                    })
-//                    .collect(Collectors.toList());
-//            }catch(Exception e){
-//                logger.error("Error while extracting Websocket Sessions from redis: " + e.getMessage());
-//                e.printStackTrace();
-//            }
-//        }
         return this.sessionList.stream().collect(Collectors.toList());
     }
 
     private void publishUpdate(CaaSTemplateUpdate update) {
         try (Jedis jedis = jedisPool.getResource()) {
             String updateString = gson.toJson(update);
-            //var channel = UPDATE_TOPIC + "." + update.getUpdateField().toString() + "." + update.getUpdateType().toString();
             var channel = UPDATE_TOPIC;
             jedis.publish(channel, updateString);
         }
