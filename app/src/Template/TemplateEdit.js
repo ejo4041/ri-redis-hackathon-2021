@@ -3,10 +3,10 @@ import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableH
 import templateService from '../services/template.service';
 import { DeleteForever } from '@material-ui/icons';
 import SharedDialog from '../SharedComponents/SharedDialog';
-import useWebSocket, { ReadyState } from 'react-use-websocket';
+// import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 export default function TemplateEdit(props) {
-    const [settings, setSettings] = useState();
+    const [settings, setSettings] = useState({});
     const [openDialog, setOpenDialog] = useState(false);
     const [openCreateDialog, setOpenCreateDialog] = useState(false);
     const [newSettingKey, setNewSettingKey] = useState();
@@ -16,29 +16,20 @@ export default function TemplateEdit(props) {
 
 
 
-    const socketUrl = `ws://localhost:8081/api/v1/updates?settingsId=${props.template.settingsId}`;
+    // const socketUrl = `ws://localhost:8081/api/v1/updates?settingsId=${props.template.settingsId}`;
 
-    const {
-      sendMessage,
-      sendJsonMessage,
-      lastMessage,
-      lastJsonMessage,
-      readyState,
-      getWebSocket
-    } = useWebSocket(socketUrl, {
-      onOpen: () => console.log('opened'),
-      //Will attempt to reconnect on all close events, such as server shutting down
-      shouldReconnect: (closeEvent) => true,
-    });
-
-
-
-
-
-
-
-
-
+    // const {
+    //   sendMessage,
+    //   sendJsonMessage,
+    //   lastMessage,
+    //   lastJsonMessage,
+    //   readyState,
+    //   getWebSocket
+    // } = useWebSocket(socketUrl, {
+    //   onOpen: () => console.log('opened'),
+    //   //Will attempt to reconnect on all close events, such as server shutting down
+    //   shouldReconnect: (closeEvent) => true,
+    // });
 
 
 
@@ -65,19 +56,12 @@ export default function TemplateEdit(props) {
 
     useEffect(() => {
         if(props && props.template && props.template.templateSettings) {
-            debugger;
             setSettings(props.template.templateSettings);
         } else {
-            setSettings({'default': 'value'})
+            setSettings({})
         }
     }, [setSettings, props])
 
-    const addRow = () => {
-        setSettings({
-            ...settings,
-            'default': 'value'
-        })
-    }
     const handleNewSettingChange = (e) => {
         setNewSettingKey(e.target.value)
     }
