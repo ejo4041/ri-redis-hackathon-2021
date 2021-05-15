@@ -5,6 +5,22 @@ ri-redis-hackathon-2021
 
 System Configuration-as-a-Service (CaaS)
 
+### Project Description
+
+CaaS provides a service-oriented-architecture for configuring templates containing default application settings.  Once a settings template is defined and saved to the Redis Data Store, any client (of any type, game, web application, thick client, etc) can retrieve a default settings template to drive default behavior within the application.  Users of the application can change the values as desired and save their own versions of the template to satisfy personal customizations needs.  
+
+Another valueable use-case of this service could be in the deployment of microservices.  An Administrator could define application settings templates per environment that the microservice could then retrieve over HTTP for real-time service configuration.
+
+Finally, the CaaS API provides real-time template updates over a websocket so connected clients can be notified in real-time about any settings template modifications made by an Administrator.
+
+### CaaS Architecture
+
+[CaaS Architecture](docs/architecture.png)
+
+### CaaS UI
+
+[CaaS UI](docs/caas-template-ui.png)
+
 ### Current Team
 - James Caple
 - Brandon Beiler
