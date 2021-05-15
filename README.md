@@ -3,7 +3,37 @@ ri-redis-hackathon-2021
 
 ## Project Name
 
-System Configuration-as-a-Service (CaaS)
+Configuration-as-a-Service (CaaS)
+
+### Project Description
+
+CaaS provides a service-oriented-architecture for configuring templates containing default application settings.  Once a settings template is defined and saved to the Redis Data Store, any client (of any type, game, web application, thick client, etc) can retrieve a default settings template to drive default behavior within the application.  Users of the application can change the values as desired and save their own versions of the template to satisfy personal customizations needs.  
+
+Another valueable use-case of this service could be in the deployment of microservices.  An Administrator could define application settings templates per environment that the microservice could then retrieve over HTTP for real-time service configuration.
+
+Finally, the CaaS API provides real-time template updates over a websocket so connected clients can be notified in real-time about any settings template modifications made by an Administrator.
+
+### CaaS Architecture
+
+The React UI is fronted by an NGINX service.  The UI talks directly to a SpringBoot microservice to perform authentication against the Keycloak service as well as to perform CRUD operations against the Redis microservice.
+
+We use JRedisJSON (https://github.com/RedisJSON/JRedisJSON) in the SpringBoot API to perform the following operations against the Redis instance:
+
+#### RedisJSON Commands
+- JSON.DEL
+- JSON.GET
+- JSON.SET
+- JSON.TYPE
+
+#### Redis Pub/Sub
+- PUBLISH
+- SUBSCRIBE
+
+[CaaS Architecture Diagram](docs/architecture.png)
+
+### CaaS UI
+
+[CaaS UI Screenshot](docs/caas-template-ui.png)
 
 ### Current Team
 - James Caple
@@ -139,7 +169,6 @@ You can auto build/start this by running.
 cd /app
 sh local_run.sh
 ```
-TODO: I was getting CORS errs when POSTing to the API, so I was trying to run the Docker to proxy the API while still running the local react app on port :3000, but I was still getting a CORS err.
 
 #### Websocket Updates
 
@@ -195,7 +224,7 @@ Some are required and some are optional.
 ws://localhost:8081/api/v1/updates?templateUpdateType=CREATE%2CUPDATE&templateUpdateField=NAME%2CSETTINGS&settingsId=caas_dev_c779f6be_e58b_4b23_b085_037c8c47f5d2
 ```
 
-### Run Whole Docker Stack
+### Running Whole Docker Stack
 
 1.  Build the UI docker image
      1.  See steps above to ensure the code successfully built
