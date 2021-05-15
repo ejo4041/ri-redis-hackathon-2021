@@ -1,4 +1,4 @@
-import { Box, Button, Grid, TableCell, TableRow, TextField, Tooltip } from '@material-ui/core';
+import { Box, Button, TableCell, TableRow, TextField, Tooltip } from '@material-ui/core';
 import { useState } from 'react';
 import templateService from '../services/template.service';
 
