@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+import { SettingsOutlined } from "@material-ui/icons"
+
 import AuthService from '../services/auth.service';
 import { setToken } from '../Utils/Common';
 
@@ -79,11 +81,14 @@ export default function Login(props) {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
+        {/* <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
-        </Avatar>
+        </Avatar> */}
+        <div className="App-logo">
+          <SettingsOutlined />
+        </div>
         <Typography component="h1" variant="h5">
-          Sign in
+          Config-As-A-Service
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleLogin.bind(this)}>
           <TextField
